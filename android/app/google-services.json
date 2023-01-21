@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "269857866646",
+    "project_id": "nexl-business-card",
+    "storage_bucket": "nexl-business-card.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269857866646:android:8a90329c0285a3484153b7",
+        "android_client_info": {
+          "package_name": "cloud.nexl.nexlbini"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269857866646-t93bcpl45qd58t2lrls44bfbr98ru8ae.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cloud.nexl.nexlbini",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "269857866646-g5eatcgqi66ilnse3r80atc6cdrsfuh6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCryFN8UxHe_agHbDYABc0Z5Ys-QOz8Wts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269857866646-g5eatcgqi66ilnse3r80atc6cdrsfuh6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "269857866646-enqia0oed4013h826lkg28s4722kc9tu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "cloud.nexl.nexlbini"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
