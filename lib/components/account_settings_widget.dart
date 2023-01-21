@@ -28,6 +28,9 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
     return Container(
       width: double.infinity,
       height: 350,
+      constraints: BoxConstraints(
+        maxWidth: 550,
+      ),
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         boxShadow: [

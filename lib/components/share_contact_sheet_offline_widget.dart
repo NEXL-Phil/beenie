@@ -60,6 +60,9 @@ class _ShareContactSheetOfflineWidgetState
     return Container(
       width: MediaQuery.of(context).size.width,
       height: double.infinity,
+      constraints: BoxConstraints(
+        maxWidth: 550,
+      ),
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.only(

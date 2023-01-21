@@ -38,6 +38,9 @@ class _LinkedInHelperWidgetState extends State<LinkedInHelperWidget> {
       child: Container(
         width: double.infinity,
         height: 550,
+        constraints: BoxConstraints(
+          maxWidth: 550,
+        ),
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           borderRadius: BorderRadius.only(
