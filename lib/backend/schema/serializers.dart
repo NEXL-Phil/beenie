@@ -6,6 +6,8 @@ import 'profiles_record.dart';
 import 'contacts_record.dart';
 import 'beeniecards_record.dart';
 import 'v_cards_record.dart';
+import 'public_branding_record.dart';
+import 'pre_created_profiles_record.dart';
 
 import 'index.dart';
 
@@ -21,6 +23,8 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   ContactsRecord,
   BeeniecardsRecord,
   VCardsRecord,
+  PublicBrandingRecord,
+  PreCreatedProfilesRecord,
   AddressStruct,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
@@ -206,6 +210,9 @@ Map<String, dynamic> mapToFirestore(Map<String, dynamic> data) =>
       }
       return MapEntry(key, value);
     });
+
+List<GeoPoint>? convertToGeoPointList(List<LatLng>? list) =>
+    list?.map((e) => e.toGeoPoint()).toList();
 
 extension GeoPointExtension on LatLng {
   GeoPoint toGeoPoint() => GeoPoint(latitude, longitude);

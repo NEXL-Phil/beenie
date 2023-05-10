@@ -9,7 +9,7 @@ import 'lat_lng.dart';
 import 'place.dart';
 import '../backend/backend.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../auth/auth_util.dart';
+import '../../auth/firebase_auth/auth_util.dart';
 
 int? getLength(List<ContactsRecord>? myList) {
   int? length = myList?.length;
@@ -1093,4 +1093,32 @@ List<String>? getJobTitleList() {
   ];
 
   return jobList;
+}
+
+String vCardQR(ProfilesRecord profileDoc) {
+  String vCardString = "BEGIN:VCARD\nN:" +
+      profileDoc.lastName! +
+      ";" +
+      profileDoc.firstName! +
+      ";\nTEL;TYPE=cell,VOICE:" +
+      profileDoc.mobilePhone! +
+      "\nTEL;TYPE=work,VOICE:" +
+      profileDoc.directLine! +
+      "\nEMAIL:" +
+      profileDoc.emailAddress! +
+      "\nORG:" +
+      profileDoc.companyName! +
+      "\nTITLE:" +
+      profileDoc.jobTitle! +
+      "\nADR;TYPE=WORK,PREF:;;;;;;" +
+      profileDoc.country! +
+      "\nURL:" +
+      profileDoc.linkedInUrl! +
+      "\nNOTE:" +
+      profileDoc.bio! +
+      "\nPHOTO;TYPE=JPEG;VALUE=URI:" +
+      Uri.parse(profileDoc.profileImage!).toString() +
+      "\nVERSION:3.0 \nEND:VCARD";
+
+  return vCardString;
 }

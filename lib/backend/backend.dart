@@ -1,7 +1,7 @@
 import 'package:built_value/serializer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../auth/auth_util.dart';
+import '../auth/firebase_auth/auth_util.dart';
 
 import '../flutter_flow/flutter_flow_util.dart';
 
@@ -10,6 +10,8 @@ import 'schema/profiles_record.dart';
 import 'schema/contacts_record.dart';
 import 'schema/beeniecards_record.dart';
 import 'schema/v_cards_record.dart';
+import 'schema/public_branding_record.dart';
+import 'schema/pre_created_profiles_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -22,6 +24,8 @@ export 'schema/profiles_record.dart';
 export 'schema/contacts_record.dart';
 export 'schema/beeniecards_record.dart';
 export 'schema/v_cards_record.dart';
+export 'schema/public_branding_record.dart';
+export 'schema/pre_created_profiles_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -290,6 +294,111 @@ Future<FFFirestorePage<VCardsRecord>> queryVCardsRecordPage({
       pageSize: pageSize,
       isStream: isStream,
     );
+
+/// Functions to query PublicBrandingRecords (as a Stream and as a Future).
+Future<int> queryPublicBrandingRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PublicBrandingRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<PublicBrandingRecord>> queryPublicBrandingRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      PublicBrandingRecord.collection,
+      PublicBrandingRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<PublicBrandingRecord>> queryPublicBrandingRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      PublicBrandingRecord.collection,
+      PublicBrandingRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<PublicBrandingRecord>> queryPublicBrandingRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      PublicBrandingRecord.collection,
+      PublicBrandingRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query PreCreatedProfilesRecords (as a Stream and as a Future).
+Future<int> queryPreCreatedProfilesRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      PreCreatedProfilesRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<PreCreatedProfilesRecord>> queryPreCreatedProfilesRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      PreCreatedProfilesRecord.collection,
+      PreCreatedProfilesRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<PreCreatedProfilesRecord>> queryPreCreatedProfilesRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      PreCreatedProfilesRecord.collection,
+      PreCreatedProfilesRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<PreCreatedProfilesRecord>>
+    queryPreCreatedProfilesRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+        queryCollectionPage(
+          PreCreatedProfilesRecord.collection,
+          PreCreatedProfilesRecord.serializer,
+          queryBuilder: queryBuilder,
+          nextPageMarker: nextPageMarker,
+          pageSize: pageSize,
+          isStream: isStream,
+        );
 
 Future<int> queryCollectionCount(
   Query collection, {

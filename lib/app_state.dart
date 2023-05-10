@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'backend/backend.dart';
+import 'backend/api_requests/api_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'flutter_flow/lat_lng.dart';
+import 'flutter_flow/flutter_flow_util.dart';
 
 class FFAppState extends ChangeNotifier {
   static final FFAppState _instance = FFAppState._internal();
@@ -9,14 +11,15 @@ class FFAppState extends ChangeNotifier {
     return _instance;
   }
 
-  FFAppState._internal() {
-    initializePersistedState();
-  }
+  FFAppState._internal();
 
   Future initializePersistedState() async {
     prefs = await SharedPreferences.getInstance();
     _baseURL = prefs.getString('ff_baseURL') ?? _baseURL;
     _firstLogin = prefs.getBool('ff_firstLogin') ?? _firstLogin;
+    _maincolorstate = _colorFromIntValue(prefs.getInt('ff_maincolorstate')) ??
+        _maincolorstate;
+    _useProfile = prefs.getBool('ff_useProfile') ?? _useProfile;
   }
 
   void update(VoidCallback callback) {
@@ -57,6 +60,20 @@ class FFAppState extends ChangeNotifier {
   set tempEmail(String _value) {
     _tempEmail = _value;
   }
+
+  Color _maincolorstate = Color(4278206930);
+  Color get maincolorstate => _maincolorstate;
+  set maincolorstate(Color _value) {
+    _maincolorstate = _value;
+    prefs.setString('ff_maincolorstate', _value.value.toString());
+  }
+
+  bool _useProfile = true;
+  bool get useProfile => _useProfile;
+  set useProfile(bool _value) {
+    _useProfile = _value;
+    prefs.setBool('ff_useProfile', _value);
+  }
 }
 
 LatLng? _latLngFromString(String? val) {
@@ -67,4 +84,11 @@ LatLng? _latLngFromString(String? val) {
   final lat = double.parse(split.first);
   final lng = double.parse(split.last);
   return LatLng(lat, lng);
+}
+
+Color? _colorFromIntValue(int? val) {
+  if (val == null) {
+    return null;
+  }
+  return Color(val);
 }

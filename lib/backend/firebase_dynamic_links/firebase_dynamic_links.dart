@@ -5,7 +5,8 @@ import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 
 const _kDynamicLinksUrl = 'https://nexlbini.page.link';
-const _kAppId = 'cloud.nexl.nexlbini';
+const _kAppBundleId = 'cloud.nexl.nexlbini';
+const _kIosAppId = '1662052252';
 
 Future<String> generateCurrentPageLink(
   BuildContext context, {
@@ -13,17 +14,24 @@ Future<String> generateCurrentPageLink(
   String? description,
   String? imageUrl,
   bool isShortLink = true,
+  bool forceRedirect = false,
 }) async {
   final dynamicLinkParams = DynamicLinkParameters(
     link: Uri.parse('$_kDynamicLinksUrl${GoRouter.of(context).location}'),
     uriPrefix: _kDynamicLinksUrl,
-    androidParameters: const AndroidParameters(packageName: _kAppId),
-    iosParameters: const IOSParameters(bundleId: _kAppId),
+    androidParameters: const AndroidParameters(packageName: _kAppBundleId),
+    iosParameters: const IOSParameters(
+      bundleId: _kAppBundleId,
+      appStoreId: _kIosAppId,
+    ),
     socialMetaTagParameters: SocialMetaTagParameters(
       title: title,
       description: description,
       imageUrl: imageUrl != null ? Uri.tryParse(imageUrl) : null,
     ),
+    navigationInfoParameters: forceRedirect
+        ? NavigationInfoParameters(forcedRedirectEnabled: true)
+        : null,
   );
   return isShortLink
       ? FirebaseDynamicLinks.instance

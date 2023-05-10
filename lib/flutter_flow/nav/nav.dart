@@ -6,7 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
 
-import '../../auth/firebase_user_provider.dart';
+import '../../auth/base_auth_user_provider.dart';
 
 import '../../backend/firebase_dynamic_links/firebase_dynamic_links.dart'
     show DynamicLinksHandler;
@@ -24,8 +24,8 @@ export '../../backend/firebase_dynamic_links/firebase_dynamic_links.dart'
 const kTransitionInfoKey = '__transition_info__';
 
 class AppStateNotifier extends ChangeNotifier {
-  BeenieFirebaseUser? initialUser;
-  BeenieFirebaseUser? user;
+  BaseAuthUser? initialUser;
+  BaseAuthUser? user;
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -50,7 +50,7 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(BeenieFirebaseUser newUser) {
+  void update(BaseAuthUser newUser) {
     initialUser ??= newUser;
     user = newUser;
     // Refresh the app on auth change unless explicitly marked otherwise.
@@ -73,14 +73,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, _) =>
-          appStateNotifier.loggedIn ? HomeWidget() : SignUpWidget(),
+          appStateNotifier.loggedIn ? HomeCopyWidget() : LoginWidget(),
       navigatorBuilder: (_, __, child) => DynamicLinksHandler(child: child),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? HomeWidget() : SignUpWidget(),
+              appStateNotifier.loggedIn ? HomeCopyWidget() : LoginWidget(),
           routes: [
             FFRoute(
               name: 'SignUp',
@@ -96,12 +96,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'Login',
               path: 'login',
               builder: (context, params) => LoginWidget(),
-            ),
-            FFRoute(
-              name: 'Home',
-              path: 'home',
-              requireAuth: true,
-              builder: (context, params) => HomeWidget(),
             ),
             FFRoute(
               name: 'myContacts',
@@ -138,7 +132,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             ),
             FFRoute(
               name: 'publicProfile',
-              path: 'publicProfile/:profile',
+              path: 'publicProfileO/:profile',
               builder: (context, params) => PublicProfileWidget(
                 profile: params.getParam('profile', ParamType.DocumentReference,
                     false, ['profiles']),
@@ -211,10 +205,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'accountDeletion',
               requireAuth: true,
               builder: (context, params) => AccountDeletionWidget(),
+            ),
+            FFRoute(
+              name: 'PublicProfileC',
+              path: 'publicProfile/:profile',
+              builder: (context, params) => PublicProfileCWidget(
+                profile: params.getParam('profile', ParamType.DocumentReference,
+                    false, ['profiles']),
+                profileID: params.getParam('profileID', ParamType.String),
+              ),
+            ),
+            FFRoute(
+              name: 'HomeCopy',
+              path: 'home',
+              requireAuth: true,
+              builder: (context, params) => HomeCopyWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
-        ).toRoute(appStateNotifier),
-      ],
+        ),
+      ].map((r) => r.toRoute(appStateNotifier)).toList(),
       urlPathStrategy: UrlPathStrategy.path,
     );
 
@@ -260,6 +269,16 @@ extension NavigationExtensions on BuildContext {
               queryParams: queryParams,
               extra: extra,
             );
+
+  void safePop() {
+    // If there is only one route on the stack, navigate to the initial
+    // page instead of popping.
+    if (GoRouter.of(this).routerDelegate.matches.length <= 1) {
+      go('/');
+    } else {
+      pop();
+    }
+  }
 }
 
 extension GoRouterExtensions on GoRouter {
@@ -271,6 +290,7 @@ extension GoRouterExtensions on GoRouter {
           : appState.updateNotifyOnAuthChange(false);
   bool shouldRedirect(bool ignoreRedirect) =>
       !ignoreRedirect && appState.hasRedirect();
+  void clearRedirectLocation() => appState.clearRedirectLocation();
   void setRedirectLocationIfUnset(String location) =>
       (routerDelegate.refreshListenable as AppStateNotifier)
           .updateNotifyOnAuthChange(false);
@@ -370,7 +390,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/signUp';
+            return '/login';
           }
           return null;
         },

@@ -1,9 +1,9 @@
 // Automatic FlutterFlow imports
-import '../../backend/backend.dart';
-import '../../flutter_flow/flutter_flow_theme.dart';
-import '../../flutter_flow/flutter_flow_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
-import '../../flutter_flow/custom_functions.dart'; // Imports custom functions
+import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
@@ -18,6 +18,7 @@ import 'package:download/download.dart';
 
 Future<String?> vCard(
     DocumentReference? userRef, DocumentReference? profileRef) async {
+  print('updating vCard');
   var vCard = VCard();
 
   DocumentSnapshot? proDoc = await getProfileDoc(profileRef!.id);
@@ -51,7 +52,8 @@ Future<String?> vCard(
     print("Error creating vCard");
   }
 
-  return await newvCardRef.getDownloadURL();
+  String vCardURL = await newvCardRef.getDownloadURL();
+  return vCardURL;
 
   /// return "https://nexl.cloud";
 

@@ -39,10 +39,11 @@
               "client_type": 3
             },
             {
-              "client_id": "269857866646-enqia0oed4013h826lkg28s4722kc9tu.apps.googleusercontent.com",
+              "client_id": "269857866646-b9lkn4v74h9fjnaof3mahin2k5r1es3g.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "cloud.nexl.nexlbini"
+                "bundle_id": "cloud.nexl.nexlbini",
+                "app_store_id": "1662052252"
               }
             }
           ]

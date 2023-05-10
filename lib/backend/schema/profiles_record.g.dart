@@ -182,6 +182,20 @@ class _$ProfilesRecordSerializer
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
+    value = object.mainColour;
+    if (value != null) {
+      result
+        ..add('main_colour')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(Color)));
+    }
+    value = object.secondaryColour;
+    if (value != null) {
+      result
+        ..add('secondary_colour')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(Color)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -303,6 +317,14 @@ class _$ProfilesRecordSerializer
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
+        case 'main_colour':
+          result.mainColour = serializers.deserialize(value,
+              specifiedType: const FullType(Color)) as Color?;
+          break;
+        case 'secondary_colour':
+          result.secondaryColour = serializers.deserialize(value,
+              specifiedType: const FullType(Color)) as Color?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -364,6 +386,10 @@ class _$ProfilesRecord extends ProfilesRecord {
   @override
   final DocumentReference<Object?>? linkedBeenieCard;
   @override
+  final Color? mainColour;
+  @override
+  final Color? secondaryColour;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$ProfilesRecord([void Function(ProfilesRecordBuilder)? updates]) =>
@@ -393,6 +419,8 @@ class _$ProfilesRecord extends ProfilesRecord {
       this.country,
       this.vCardRef,
       this.linkedBeenieCard,
+      this.mainColour,
+      this.secondaryColour,
       this.ffRef})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
@@ -434,49 +462,42 @@ class _$ProfilesRecord extends ProfilesRecord {
         country == other.country &&
         vCardRef == other.vCardRef &&
         linkedBeenieCard == other.linkedBeenieCard &&
+        mainColour == other.mainColour &&
+        secondaryColour == other.secondaryColour &&
         ffRef == other.ffRef;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc(
-                                $jc(
-                                    $jc(
-                                        $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        $jc(
-                                                                            $jc($jc($jc($jc($jc($jc(0, address.hashCode), owner.hashCode), createdAt.hashCode), modifiedAt.hashCode), archived.hashCode),
-                                                                                defaultAddress.hashCode),
-                                                                            linkedInUrl.hashCode),
-                                                                        firstName.hashCode),
-                                                                    lastName.hashCode),
-                                                                jobTitle.hashCode),
-                                                            profileImage.hashCode),
-                                                        companyName.hashCode),
-                                                    companyLogo.hashCode),
-                                                mobilePhone.hashCode),
-                                            directLine.hashCode),
-                                        faxNumber.hashCode),
-                                    emailAddress.hashCode),
-                                bio.hashCode),
-                            publicProfileId.hashCode),
-                        domain.hashCode),
-                    country.hashCode),
-                vCardRef.hashCode),
-            linkedBeenieCard.hashCode),
-        ffRef.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, address.hashCode);
+    _$hash = $jc(_$hash, owner.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, modifiedAt.hashCode);
+    _$hash = $jc(_$hash, archived.hashCode);
+    _$hash = $jc(_$hash, defaultAddress.hashCode);
+    _$hash = $jc(_$hash, linkedInUrl.hashCode);
+    _$hash = $jc(_$hash, firstName.hashCode);
+    _$hash = $jc(_$hash, lastName.hashCode);
+    _$hash = $jc(_$hash, jobTitle.hashCode);
+    _$hash = $jc(_$hash, profileImage.hashCode);
+    _$hash = $jc(_$hash, companyName.hashCode);
+    _$hash = $jc(_$hash, companyLogo.hashCode);
+    _$hash = $jc(_$hash, mobilePhone.hashCode);
+    _$hash = $jc(_$hash, directLine.hashCode);
+    _$hash = $jc(_$hash, faxNumber.hashCode);
+    _$hash = $jc(_$hash, emailAddress.hashCode);
+    _$hash = $jc(_$hash, bio.hashCode);
+    _$hash = $jc(_$hash, publicProfileId.hashCode);
+    _$hash = $jc(_$hash, domain.hashCode);
+    _$hash = $jc(_$hash, country.hashCode);
+    _$hash = $jc(_$hash, vCardRef.hashCode);
+    _$hash = $jc(_$hash, linkedBeenieCard.hashCode);
+    _$hash = $jc(_$hash, mainColour.hashCode);
+    _$hash = $jc(_$hash, secondaryColour.hashCode);
+    _$hash = $jc(_$hash, ffRef.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
@@ -505,6 +526,8 @@ class _$ProfilesRecord extends ProfilesRecord {
           ..add('country', country)
           ..add('vCardRef', vCardRef)
           ..add('linkedBeenieCard', linkedBeenieCard)
+          ..add('mainColour', mainColour)
+          ..add('secondaryColour', secondaryColour)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -611,6 +634,15 @@ class ProfilesRecordBuilder
   set linkedBeenieCard(DocumentReference<Object?>? linkedBeenieCard) =>
       _$this._linkedBeenieCard = linkedBeenieCard;
 
+  Color? _mainColour;
+  Color? get mainColour => _$this._mainColour;
+  set mainColour(Color? mainColour) => _$this._mainColour = mainColour;
+
+  Color? _secondaryColour;
+  Color? get secondaryColour => _$this._secondaryColour;
+  set secondaryColour(Color? secondaryColour) =>
+      _$this._secondaryColour = secondaryColour;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -645,6 +677,8 @@ class ProfilesRecordBuilder
       _country = $v.country;
       _vCardRef = $v.vCardRef;
       _linkedBeenieCard = $v.linkedBeenieCard;
+      _mainColour = $v.mainColour;
+      _secondaryColour = $v.secondaryColour;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -693,6 +727,8 @@ class ProfilesRecordBuilder
               country: country,
               vCardRef: vCardRef,
               linkedBeenieCard: linkedBeenieCard,
+              mainColour: mainColour,
+              secondaryColour: secondaryColour,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
@@ -710,4 +746,4 @@ class ProfilesRecordBuilder
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

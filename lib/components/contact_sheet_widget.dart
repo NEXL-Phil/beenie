@@ -1,15 +1,17 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../custom_code/actions/index.dart' as actions;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'contact_sheet_model.dart';
+export 'contact_sheet_model.dart';
 
 class ContactSheetWidget extends StatefulWidget {
   const ContactSheetWidget({
@@ -24,13 +26,27 @@ class ContactSheetWidget extends StatefulWidget {
 }
 
 class _ContactSheetWidgetState extends State<ContactSheetWidget> {
-  String? downloadURL;
+  late ContactSheetModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ContactSheetModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.maybeDispose();
+
+    super.dispose();
   }
 
   @override
@@ -44,38 +60,39 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).primary,
               ),
             ),
           );
         }
         final contactCardContactsRecord = snapshot.data!;
         return Container(
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery.of(context).size.width * 1.0,
           height: double.infinity,
           constraints: BoxConstraints(
-            maxWidth: 550,
+            maxWidth: 550.0,
           ),
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(0),
-              bottomRight: Radius.circular(0),
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
+              bottomLeft: Radius.circular(0.0),
+              bottomRight: Radius.circular(0.0),
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
             ),
           ),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+            padding: EdgeInsetsDirectional.fromSTEB(4.0, 4.0, 4.0, 4.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(20, 8, 20, 0),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(20.0, 8.0, 20.0, 0.0),
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
@@ -83,56 +100,86 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onTap: () async {
                               Navigator.pop(context);
                             },
                             child: Divider(
-                              thickness: 3,
-                              indent: 150,
-                              endIndent: 150,
+                              thickness: 3.0,
+                              indent: 150.0,
+                              endIndent: 150.0,
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
                             ),
                           ),
-                          Align(
-                            alignment: AlignmentDirectional(1, 0),
-                            child: FlutterFlowIconButton(
-                              borderColor: Colors.transparent,
-                              borderRadius: 30,
-                              borderWidth: 1,
-                              buttonSize: 32,
-                              icon: Icon(
-                                Icons.edit_rounded,
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                size: 16,
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Align(
+                                alignment: AlignmentDirectional(1.0, 0.0),
+                                child: FlutterFlowIconButton(
+                                  borderColor: Colors.transparent,
+                                  borderRadius: 30.0,
+                                  borderWidth: 1.0,
+                                  buttonSize: 32.0,
+                                  icon: Icon(
+                                    Icons.restore_from_trash,
+                                    color:
+                                        FlutterFlowTheme.of(context).alternate,
+                                    size: 16.0,
+                                  ),
+                                  onPressed: () async {
+                                    await widget.contactReference!.delete();
+                                    Navigator.pop(context);
+                                  },
+                                ),
                               ),
-                              onPressed: () async {
-                                context.pushNamed(
-                                  'editContact',
-                                  queryParams: {
-                                    'contactRef': serializeParam(
-                                      contactCardContactsRecord.reference,
-                                      ParamType.DocumentReference,
-                                    ),
-                                    'isNew': serializeParam(
-                                      false,
-                                      ParamType.bool,
-                                    ),
-                                  }.withoutNulls,
-                                );
-                              },
-                            ),
+                              Align(
+                                alignment: AlignmentDirectional(1.0, 0.0),
+                                child: FlutterFlowIconButton(
+                                  borderColor: Colors.transparent,
+                                  borderRadius: 30.0,
+                                  borderWidth: 1.0,
+                                  buttonSize: 32.0,
+                                  icon: Icon(
+                                    Icons.edit_rounded,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    size: 16.0,
+                                  ),
+                                  onPressed: () async {
+                                    context.pushNamed(
+                                      'editContact',
+                                      queryParams: {
+                                        'contactRef': serializeParam(
+                                          contactCardContactsRecord.reference,
+                                          ParamType.DocumentReference,
+                                        ),
+                                        'isNew': serializeParam(
+                                          false,
+                                          ParamType.bool,
+                                        ),
+                                      }.withoutNulls,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 16.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  width: 100,
-                                  height: 100,
+                                  width: 100.0,
+                                  height: 100.0,
                                   decoration: BoxDecoration(
                                     color: Color(0xFFDBE2E7),
                                     image: DecorationImage(
@@ -147,10 +194,10 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            4, 4, 4, 4),
+                                            4.0, 4.0, 4.0, 4.0),
                                         child: Container(
-                                          width: 120,
-                                          height: 120,
+                                          width: 120.0,
+                                          height: 120.0,
                                           clipBehavior: Clip.antiAlias,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
@@ -162,10 +209,10 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                       ),
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            4, 4, 4, 4),
+                                            4.0, 4.0, 4.0, 4.0),
                                         child: Container(
-                                          width: 120,
-                                          height: 120,
+                                          width: 120.0,
+                                          height: 120.0,
                                           clipBehavior: Clip.antiAlias,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
@@ -193,11 +240,12 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                               Expanded(
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 4, 16, 0),
+                                      0.0, 4.0, 16.0, 0.0),
                                   child: Text(
                                     '${contactCardContactsRecord.firstName} ${contactCardContactsRecord.lastName}',
                                     textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context).title3,
+                                    style: FlutterFlowTheme.of(context)
+                                        .headlineSmall,
                                   ),
                                 ),
                               ),
@@ -209,19 +257,19 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                               Expanded(
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 8, 0, 0),
+                                      0.0, 8.0, 0.0, 0.0),
                                   child: Text(
                                     contactCardContactsRecord.bio!,
                                     style:
-                                        FlutterFlowTheme.of(context).bodyText2,
+                                        FlutterFlowTheme.of(context).bodySmall,
                                   ),
                                 ),
                               ),
                             ],
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 32, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 32.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -234,9 +282,13 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                       Text(
                                         'Email',
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText2,
+                                            .bodySmall,
                                       ),
                                       InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
                                         onTap: () async {
                                           await Clipboard.setData(ClipboardData(
                                               text: contactCardContactsRecord
@@ -246,7 +298,7 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                           contactCardContactsRecord
                                               .emailAddress!,
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                              .bodyMedium,
                                         ),
                                       ),
                                     ],
@@ -256,8 +308,8 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 16.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -270,9 +322,13 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                       Text(
                                         'Mobile',
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText2,
+                                            .bodySmall,
                                       ),
                                       InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
                                         onTap: () async {
                                           await Clipboard.setData(ClipboardData(
                                               text: contactCardContactsRecord
@@ -282,7 +338,7 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                           contactCardContactsRecord
                                               .mobilePhone!,
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                              .bodyMedium,
                                         ),
                                       ),
                                     ],
@@ -292,8 +348,8 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 16.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -306,9 +362,13 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                       Text(
                                         'LinkedIn',
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText2,
+                                            .bodySmall,
                                       ),
                                       InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
                                         onTap: () async {
                                           await launchURL(
                                               contactCardContactsRecord
@@ -318,7 +378,7 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                           contactCardContactsRecord
                                               .linkedInUrl!,
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                              .bodyMedium,
                                         ),
                                       ),
                                     ],
@@ -328,8 +388,8 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 16.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -342,12 +402,12 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                       Text(
                                         'Job Title',
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText2,
+                                            .bodySmall,
                                       ),
                                       Text(
                                         contactCardContactsRecord.jobTitle!,
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                            .bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -356,8 +416,8 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 16.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -370,12 +430,12 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                                       Text(
                                         'Company',
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText2,
+                                            .bodySmall,
                                       ),
                                       Text(
                                         contactCardContactsRecord.companyName!,
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
+                                            .bodyMedium,
                                       ),
                                     ],
                                   ),
@@ -384,35 +444,42 @@ class _ContactSheetWidgetState extends State<ContactSheetWidget> {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                downloadURL = await actions.vCardContact(
-                                  currentUserReference,
-                                  widget.contactReference,
-                                );
-                                await launchURL(downloadURL!);
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 25.0, 0.0, 0.0),
+                            child: AuthUserStreamWidget(
+                              builder: (context) => FFButtonWidget(
+                                onPressed: () async {
+                                  _model.downloadURL =
+                                      await actions.vCardContact(
+                                    currentUserReference,
+                                    widget.contactReference,
+                                  );
+                                  await launchURL(_model.downloadURL!);
 
-                                setState(() {});
-                              },
-                              text: 'Download contact',
-                              options: FFButtonOptions(
-                                width: double.infinity,
-                                height: 40,
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Poppins',
-                                      color: Colors.white,
-                                    ),
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
+                                  setState(() {});
+                                },
+                                text: 'Download contact',
+                                options: FFButtonOptions(
+                                  width: double.infinity,
+                                  height: 40.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: currentUserDocument!.maincolor,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Poppins',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 2.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ),

@@ -1,16 +1,18 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../backend/firebase_storage/storage.dart';
-import '../components/contact_sheet_widget.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/upload_media.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/backend/firebase_storage/storage.dart';
+import '/components/contact_sheet_widget.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/upload_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'edit_contact_model.dart';
+export 'edit_contact_model.dart';
 
 class EditContactWidget extends StatefulWidget {
   const EditContactWidget({
@@ -27,36 +29,22 @@ class EditContactWidget extends StatefulWidget {
 }
 
 class _EditContactWidgetState extends State<EditContactWidget> {
-  bool isMediaUploading = false;
-  String uploadedFileUrl = '';
+  late EditContactModel _model;
 
-  TextEditingController? firstNameController;
-  TextEditingController? lastNameController;
-  TextEditingController? emailController;
-  TextEditingController? jobTitleController;
-  TextEditingController? companyNameController;
-  TextEditingController? yourMobileController;
-  TextEditingController? yourLinkedInController;
-  TextEditingController? myBioController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => EditContactModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
-    companyNameController?.dispose();
-    emailController?.dispose();
-    firstNameController?.dispose();
-    lastNameController?.dispose();
-    jobTitleController?.dispose();
-    yourMobileController?.dispose();
-    yourLinkedInController?.dispose();
-    myBioController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -71,10 +59,10 @@ class _EditContactWidgetState extends State<EditContactWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).primary,
               ),
             ),
           );
@@ -84,7 +72,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(100),
+            preferredSize: Size.fromHeight(100.0),
             child: AppBar(
               backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
               automaticallyImplyLeading: false,
@@ -100,17 +88,17 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                       children: [
                         if (!widget.isNew!)
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                12.0, 0.0, 0.0, 0.0),
                             child: FlutterFlowIconButton(
                               borderColor: Colors.transparent,
-                              borderRadius: 30,
-                              borderWidth: 1,
-                              buttonSize: 50,
+                              borderRadius: 30.0,
+                              borderWidth: 1.0,
+                              buttonSize: 50.0,
                               icon: Icon(
                                 Icons.arrow_back_rounded,
                                 color: FlutterFlowTheme.of(context).primaryText,
-                                size: 30,
+                                size: 30.0,
                               ),
                               onPressed: () async {
                                 context.pop();
@@ -120,13 +108,16 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(24, 0, 0, 0),
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 0.0, 0.0),
                       child: Text(
                         widget.isNew! ? 'Create Contact' : 'Edit Contact',
-                        style: FlutterFlowTheme.of(context).title2.override(
+                        style: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .override(
                               fontFamily: 'Poppins',
                               color: FlutterFlowTheme.of(context).primaryText,
-                              fontSize: 22,
+                              fontSize: 22.0,
                             ),
                       ),
                     ),
@@ -135,23 +126,23 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                 centerTitle: true,
                 expandedTitleScale: 1.0,
               ),
-              elevation: 0,
+              elevation: 0.0,
             ),
           ),
           body: SafeArea(
             child: Align(
-              alignment: AlignmentDirectional(0, 0),
+              alignment: AlignmentDirectional(0.0, 0.0),
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 constraints: BoxConstraints(
-                  maxWidth: 500,
+                  maxWidth: 500.0,
                 ),
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 18, 0, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 18.0, 0.0, 0.0),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
@@ -161,18 +152,18 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 100,
-                              height: 100,
+                              width: 100.0,
+                              height: 100.0,
                               decoration: BoxDecoration(
                                 color: Color(0xFFDBE2E7),
                                 shape: BoxShape.circle,
                               ),
                               child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    2.0, 2.0, 2.0, 2.0),
                                 child: Container(
-                                  width: 90,
-                                  height: 90,
+                                  width: 90.0,
+                                  height: 90.0,
                                   clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
@@ -190,84 +181,111 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 12.0, 0.0, 16.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              FFButtonWidget(
-                                onPressed: () async {
-                                  final selectedMedia =
-                                      await selectMediaWithSourceBottomSheet(
-                                    context: context,
-                                    maxWidth: 250.00,
-                                    allowPhoto: true,
-                                  );
-                                  if (selectedMedia != null &&
-                                      selectedMedia.every((m) =>
-                                          validateFileFormat(
-                                              m.storagePath, context))) {
-                                    setState(() => isMediaUploading = true);
-                                    var downloadUrls = <String>[];
-                                    try {
-                                      showUploadMessage(
-                                        context,
-                                        'Uploading file...',
-                                        showLoading: true,
-                                      );
-                                      downloadUrls = (await Future.wait(
-                                        selectedMedia.map(
-                                          (m) async => await uploadData(
-                                              m.storagePath, m.bytes),
-                                        ),
-                                      ))
-                                          .where((u) => u != null)
-                                          .map((u) => u!)
-                                          .toList();
-                                    } finally {
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar();
-                                      isMediaUploading = false;
-                                    }
-                                    if (downloadUrls.length ==
-                                        selectedMedia.length) {
-                                      setState(() =>
-                                          uploadedFileUrl = downloadUrls.first);
-                                      showUploadMessage(context, 'Success!');
-                                    } else {
-                                      setState(() {});
-                                      showUploadMessage(
-                                          context, 'Failed to upload media');
-                                      return;
-                                    }
-                                  }
+                              AuthUserStreamWidget(
+                                builder: (context) => FFButtonWidget(
+                                  onPressed: () async {
+                                    final selectedMedia =
+                                        await selectMediaWithSourceBottomSheet(
+                                      context: context,
+                                      maxWidth: 250.00,
+                                      allowPhoto: true,
+                                    );
+                                    if (selectedMedia != null &&
+                                        selectedMedia.every((m) =>
+                                            validateFileFormat(
+                                                m.storagePath, context))) {
+                                      setState(
+                                          () => _model.isDataUploading = true);
+                                      var selectedUploadedFiles =
+                                          <FFUploadedFile>[];
+                                      var downloadUrls = <String>[];
+                                      try {
+                                        showUploadMessage(
+                                          context,
+                                          'Uploading file...',
+                                          showLoading: true,
+                                        );
+                                        selectedUploadedFiles = selectedMedia
+                                            .map((m) => FFUploadedFile(
+                                                  name: m.storagePath
+                                                      .split('/')
+                                                      .last,
+                                                  bytes: m.bytes,
+                                                  height: m.dimensions?.height,
+                                                  width: m.dimensions?.width,
+                                                  blurHash: m.blurHash,
+                                                ))
+                                            .toList();
 
-                                  final contactsUpdateData =
-                                      createContactsRecordData(
-                                    contactImage: uploadedFileUrl,
-                                  );
-                                  await widget.contactRef!
-                                      .update(contactsUpdateData);
-                                },
-                                text: 'Change Photo',
-                                options: FFButtonOptions(
-                                  width: 130,
-                                  height: 40,
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Lexend Deca',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                  elevation: 1,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
+                                        downloadUrls = (await Future.wait(
+                                          selectedMedia.map(
+                                            (m) async => await uploadData(
+                                                m.storagePath, m.bytes),
+                                          ),
+                                        ))
+                                            .where((u) => u != null)
+                                            .map((u) => u!)
+                                            .toList();
+                                      } finally {
+                                        ScaffoldMessenger.of(context)
+                                            .hideCurrentSnackBar();
+                                        _model.isDataUploading = false;
+                                      }
+                                      if (selectedUploadedFiles.length ==
+                                              selectedMedia.length &&
+                                          downloadUrls.length ==
+                                              selectedMedia.length) {
+                                        setState(() {
+                                          _model.uploadedLocalFile =
+                                              selectedUploadedFiles.first;
+                                          _model.uploadedFileUrl =
+                                              downloadUrls.first;
+                                        });
+                                        showUploadMessage(context, 'Success!');
+                                      } else {
+                                        setState(() {});
+                                        showUploadMessage(
+                                            context, 'Failed to upload data');
+                                        return;
+                                      }
+                                    }
+
+                                    final contactsUpdateData =
+                                        createContactsRecordData(
+                                      contactImage: _model.uploadedFileUrl,
+                                    );
+                                    await widget.contactRef!
+                                        .update(contactsUpdateData);
+                                  },
+                                  text: 'Change Photo',
+                                  options: FFButtonOptions(
+                                    width: 130.0,
+                                    height: 40.0,
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryBackground,
+                                    textStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Lexend Deca',
+                                          color: currentUserDocument!.maincolor,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                    elevation: 1.0,
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1.0,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -275,10 +293,10 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 0.0, 20.0, 16.0),
                           child: TextFormField(
-                            controller: firstNameController ??=
+                            controller: _model.firstNameController ??=
                                 TextEditingController(
                               text: editContactContactsRecord.firstName,
                             ),
@@ -286,54 +304,55 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                             decoration: InputDecoration(
                               labelText: 'First Name',
                               labelStyle:
-                                  FlutterFlowTheme.of(context).bodyText2,
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodySmall,
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2,
+                                  color: Color(0x00000000),
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              contentPadding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 24.0, 0.0, 24.0),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                             maxLines: null,
                             keyboardType: TextInputType.name,
+                            validator: _model.firstNameControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 0.0, 20.0, 16.0),
                           child: TextFormField(
-                            controller: lastNameController ??=
+                            controller: _model.lastNameController ??=
                                 TextEditingController(
                               text: editContactContactsRecord.lastName,
                             ),
@@ -341,54 +360,55 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                             decoration: InputDecoration(
                               labelText: 'First Name',
                               labelStyle:
-                                  FlutterFlowTheme.of(context).bodyText2,
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodySmall,
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2,
+                                  color: Color(0x00000000),
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              contentPadding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 24.0, 0.0, 24.0),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                             maxLines: null,
                             keyboardType: TextInputType.name,
+                            validator: _model.lastNameControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 0.0, 20.0, 16.0),
                           child: TextFormField(
-                            controller: emailController ??=
+                            controller: _model.emailController ??=
                                 TextEditingController(
                               text: editContactContactsRecord.emailAddress,
                             ),
@@ -396,54 +416,55 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                             decoration: InputDecoration(
                               labelText: 'Email',
                               labelStyle:
-                                  FlutterFlowTheme.of(context).bodyText2,
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodySmall,
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2,
+                                  color: Color(0x00000000),
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              contentPadding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 24.0, 0.0, 24.0),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                             maxLines: null,
                             keyboardType: TextInputType.emailAddress,
+                            validator: _model.emailControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 0.0, 20.0, 16.0),
                           child: TextFormField(
-                            controller: jobTitleController ??=
+                            controller: _model.jobTitleController ??=
                                 TextEditingController(
                               text: editContactContactsRecord.jobTitle,
                             ),
@@ -451,53 +472,54 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                             decoration: InputDecoration(
                               labelText: 'Job Title',
                               labelStyle:
-                                  FlutterFlowTheme.of(context).bodyText2,
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodySmall,
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2,
+                                  color: Color(0x00000000),
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              contentPadding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 24.0, 0.0, 24.0),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                             maxLines: null,
+                            validator: _model.jobTitleControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 0.0, 20.0, 16.0),
                           child: TextFormField(
-                            controller: companyNameController ??=
+                            controller: _model.companyNameController ??=
                                 TextEditingController(
                               text: editContactContactsRecord.companyName,
                             ),
@@ -505,53 +527,54 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                             decoration: InputDecoration(
                               labelText: 'Company Name',
                               labelStyle:
-                                  FlutterFlowTheme.of(context).bodyText2,
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodySmall,
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2,
+                                  color: Color(0x00000000),
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              contentPadding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 24.0, 0.0, 24.0),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                             maxLines: null,
+                            validator: _model.companyNameControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 0.0, 20.0, 16.0),
                           child: TextFormField(
-                            controller: yourMobileController ??=
+                            controller: _model.yourMobileController ??=
                                 TextEditingController(
                               text: editContactContactsRecord.mobilePhone,
                             ),
@@ -559,54 +582,55 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                             decoration: InputDecoration(
                               labelText: 'Mobile',
                               labelStyle:
-                                  FlutterFlowTheme.of(context).bodyText2,
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodySmall,
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2,
+                                  color: Color(0x00000000),
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              contentPadding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 24.0, 0.0, 24.0),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                             maxLines: null,
                             keyboardType: TextInputType.phone,
+                            validator: _model.yourMobileControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 0.0, 20.0, 16.0),
                           child: TextFormField(
-                            controller: yourLinkedInController ??=
+                            controller: _model.yourLinkedInController ??=
                                 TextEditingController(
                               text: editContactContactsRecord.linkedInUrl,
                             ),
@@ -614,54 +638,55 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                             decoration: InputDecoration(
                               labelText: 'LinkedIn URL',
                               labelStyle:
-                                  FlutterFlowTheme.of(context).bodyText2,
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodySmall,
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2,
+                                  color: Color(0x00000000),
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              contentPadding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 24.0, 0.0, 24.0),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                             maxLines: null,
                             keyboardType: TextInputType.url,
+                            validator: _model.yourLinkedInControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 12),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              20.0, 0.0, 20.0, 12.0),
                           child: TextFormField(
-                            controller: myBioController ??=
+                            controller: _model.myBioController ??=
                                 TextEditingController(
                               text: editContactContactsRecord.bio,
                             ),
@@ -669,115 +694,125 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                             decoration: InputDecoration(
                               labelText: 'Short bio',
                               labelStyle:
-                                  FlutterFlowTheme.of(context).bodyText2,
-                              hintStyle: FlutterFlowTheme.of(context).bodyText2,
+                                  FlutterFlowTheme.of(context).bodySmall,
+                              hintStyle: FlutterFlowTheme.of(context).bodySmall,
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2,
+                                  color: Color(0x00000000),
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
-                                  width: 2,
+                                  width: 2.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                               filled: true,
                               fillColor: FlutterFlowTheme.of(context)
                                   .secondaryBackground,
-                              contentPadding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 24, 0, 24),
+                              contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 24.0, 0.0, 24.0),
                             ),
-                            style: FlutterFlowTheme.of(context).bodyText1,
+                            style: FlutterFlowTheme.of(context).bodyMedium,
                             textAlign: TextAlign.start,
                             maxLines: 3,
+                            validator: _model.myBioControllerValidator
+                                .asValidator(context),
                           ),
                         ),
                         Align(
-                          alignment: AlignmentDirectional(0, 0.05),
+                          alignment: AlignmentDirectional(0.0, 0.05),
                           child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                final contactsUpdateData =
-                                    createContactsRecordData(
-                                  firstName: firstNameController?.text ?? '',
-                                  lastName: lastNameController?.text ?? '',
-                                  emailAddress: emailController?.text ?? '',
-                                  mobilePhone: yourMobileController?.text ?? '',
-                                  bio: myBioController?.text ?? '',
-                                  linkedInUrl:
-                                      yourLinkedInController?.text ?? '',
-                                  jobTitle: jobTitleController?.text ?? '',
-                                  companyName:
-                                      companyNameController?.text ?? '',
-                                );
-                                await widget.contactRef!
-                                    .update(contactsUpdateData);
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 24.0, 0.0, 0.0),
+                            child: AuthUserStreamWidget(
+                              builder: (context) => FFButtonWidget(
+                                onPressed: () async {
+                                  final contactsUpdateData =
+                                      createContactsRecordData(
+                                    firstName: _model.firstNameController.text,
+                                    lastName: _model.lastNameController.text,
+                                    emailAddress: _model.emailController.text,
+                                    mobilePhone:
+                                        _model.yourMobileController.text,
+                                    bio: _model.myBioController.text,
+                                    linkedInUrl:
+                                        _model.yourLinkedInController.text,
+                                    jobTitle: _model.jobTitleController.text,
+                                    companyName:
+                                        _model.companyNameController.text,
+                                  );
+                                  await widget.contactRef!
+                                      .update(contactsUpdateData);
 
-                                context.goNamed('myContacts');
+                                  context.goNamed('myContacts');
 
-                                await showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  backgroundColor: Colors.transparent,
-                                  enableDrag: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return Padding(
-                                      padding:
-                                          MediaQuery.of(context).viewInsets,
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.8,
-                                        child: ContactSheetWidget(
-                                          contactReference: widget.contactRef,
+                                  await showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    barrierColor: Color(0x00000000),
+                                    enableDrag: false,
+                                    context: context,
+                                    builder: (bottomSheetContext) {
+                                      return Padding(
+                                        padding:
+                                            MediaQuery.of(bottomSheetContext)
+                                                .viewInsets,
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.8,
+                                          child: ContactSheetWidget(
+                                            contactReference: widget.contactRef,
+                                          ),
                                         ),
+                                      );
+                                    },
+                                  ).then((value) => setState(() {}));
+                                },
+                                text: widget.isNew!
+                                    ? 'Create Contact'
+                                    : 'Save Contact',
+                                options: FFButtonOptions(
+                                  width: 340.0,
+                                  height: 60.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: currentUserDocument!.maincolor,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Lexend Deca',
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.normal,
                                       ),
-                                    );
-                                  },
-                                ).then((value) => setState(() {}));
-                              },
-                              text: widget.isNew!
-                                  ? 'Create Contact'
-                                  : 'Save Contact',
-                              options: FFButtonOptions(
-                                width: 340,
-                                height: 60,
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                elevation: 2,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
+                                  elevation: 2.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -785,9 +820,13 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                         ),
                         if (widget.isNew ?? true)
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 16.0, 0.0, 0.0),
                             child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                               onTap: () async {
                                 await widget.contactRef!.delete();
 
@@ -795,7 +834,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                               },
                               child: Text(
                                 'Cancel',
-                                style: FlutterFlowTheme.of(context).bodyText2,
+                                style: FlutterFlowTheme.of(context).bodySmall,
                               ),
                             ),
                           ),

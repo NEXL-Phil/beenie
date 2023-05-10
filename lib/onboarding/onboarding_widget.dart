@@ -1,11 +1,13 @@
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'onboarding_model.dart';
+export 'onboarding_model.dart';
 
 class OnboardingWidget extends StatefulWidget {
   const OnboardingWidget({Key? key}) : super(key: key);
@@ -15,14 +17,28 @@ class OnboardingWidget extends StatefulWidget {
 }
 
 class _OnboardingWidgetState extends State<OnboardingWidget> {
-  PageController? pageViewController;
+  late OnboardingModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  int get pageViewCurrentIndex => _model.pageViewController != null &&
+          _model.pageViewController!.hasClients &&
+          _model.pageViewController!.page != null
+      ? _model.pageViewController!.page!.round()
+      : 0;
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => OnboardingModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -40,17 +56,17 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
               Expanded(
                 child: Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 1,
+                  height: MediaQuery.of(context).size.height * 1.0,
                   child: Stack(
                     children: [
                       PageView(
-                        controller: pageViewController ??=
+                        controller: _model.pageViewController ??=
                             PageController(initialPage: 0),
                         scrollDirection: Axis.vertical,
                         children: [
                           Container(
-                            width: 100,
-                            height: 100,
+                            width: 100.0,
+                            height: 100.0,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
@@ -65,11 +81,11 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 20),
+                                          0.0, 0.0, 0.0, 20.0),
                                       child: Image.asset(
                                         'assets/images/Beenie-Features_2A-1024x1024.png',
-                                        width: 350,
-                                        height: 400,
+                                        width: 350.0,
+                                        height: 400.0,
                                         fit: BoxFit.fitWidth,
                                       ),
                                     ),
@@ -77,20 +93,20 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
                                         'Create your profile',
                                         style: FlutterFlowTheme.of(context)
-                                            .title1
+                                            .displaySmall
                                             .override(
                                               fontFamily: 'Outfit',
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryText,
-                                              fontSize: 32,
+                                              fontSize: 32.0,
                                               fontWeight: FontWeight.w500,
                                             ),
                                       ),
@@ -99,7 +115,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
@@ -107,13 +123,13 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                         child: Text(
                                           'Simply follow the prompts and in 30 seconds you’ll have a beautiful, ready to tap Beenie profile to share .',
                                           style: FlutterFlowTheme.of(context)
-                                              .subtitle2
+                                              .titleSmall
                                               .override(
                                                 fontFamily: 'Outfit',
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryText,
-                                                fontSize: 16,
+                                                fontSize: 16.0,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                         ),
@@ -123,16 +139,17 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 16, 0, 0),
+                                            0.0, 16.0, 0.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            await pageViewController?.nextPage(
+                                            await _model.pageViewController
+                                                ?.nextPage(
                                               duration:
                                                   Duration(milliseconds: 300),
                                               curve: Curves.ease,
@@ -140,24 +157,30 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                           },
                                           text: 'Next',
                                           options: FFButtonOptions(
-                                            width: 170,
-                                            height: 50,
+                                            width: 170.0,
+                                            height: 50.0,
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 0.0, 0.0),
+                                            iconPadding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 0.0, 0.0),
                                             color: FlutterFlowTheme.of(context)
-                                                .primaryColor,
+                                                .primary,
                                             textStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .subtitle2
+                                                    .titleSmall
                                                     .override(
                                                       fontFamily: 'Lexend Deca',
                                                       color: Colors.white,
-                                                      fontSize: 16,
+                                                      fontSize: 16.0,
                                                       fontWeight:
                                                           FontWeight.w500,
                                                     ),
-                                            elevation: 2,
+                                            elevation: 2.0,
                                             borderSide: BorderSide(
                                               color: Colors.transparent,
-                                              width: 1,
+                                              width: 1.0,
                                             ),
                                           ),
                                         ),
@@ -169,8 +192,8 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                             ),
                           ),
                           Container(
-                            width: 100,
-                            height: 100,
+                            width: 100.0,
+                            height: 100.0,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
@@ -185,11 +208,11 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 20),
+                                          0.0, 0.0, 0.0, 20.0),
                                       child: Image.asset(
                                         'assets/images/tap.png',
-                                        width: 350,
-                                        height: 400,
+                                        width: 350.0,
+                                        height: 400.0,
                                         fit: BoxFit.fitWidth,
                                       ),
                                     ),
@@ -197,20 +220,20 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
                                         'Tap your beenie card',
                                         style: FlutterFlowTheme.of(context)
-                                            .title1
+                                            .displaySmall
                                             .override(
                                               fontFamily: 'Outfit',
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryText,
-                                              fontSize: 32,
+                                              fontSize: 32.0,
                                               fontWeight: FontWeight.w500,
                                             ),
                                       ),
@@ -219,7 +242,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
@@ -227,13 +250,13 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                         child: Text(
                                           'Simply tap your  NFC enabled beenie card to share your details with others. ',
                                           style: FlutterFlowTheme.of(context)
-                                              .subtitle2
+                                              .titleSmall
                                               .override(
                                                 fontFamily: 'Outfit',
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .secondaryText,
-                                                fontSize: 16,
+                                                fontSize: 16.0,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                         ),
@@ -243,16 +266,17 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 16, 0, 0),
+                                            0.0, 16.0, 0.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            await pageViewController?.nextPage(
+                                            await _model.pageViewController
+                                                ?.nextPage(
                                               duration:
                                                   Duration(milliseconds: 300),
                                               curve: Curves.ease,
@@ -260,25 +284,31 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                           },
                                           text: 'Next',
                                           options: FFButtonOptions(
-                                            width: 170,
-                                            height: 50,
+                                            width: 170.0,
+                                            height: 50.0,
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 0.0, 0.0),
+                                            iconPadding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 0.0, 0.0),
                                             color: FlutterFlowTheme.of(context)
-                                                .primaryColor,
+                                                .primary,
                                             textStyle: FlutterFlowTheme.of(
                                                     context)
-                                                .subtitle2
+                                                .titleSmall
                                                 .override(
                                                   fontFamily: 'Lexend Deca',
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .primaryBtnText,
-                                                  fontSize: 16,
+                                                  fontSize: 16.0,
                                                   fontWeight: FontWeight.w500,
                                                 ),
-                                            elevation: 2,
+                                            elevation: 2.0,
                                             borderSide: BorderSide(
                                               color: Colors.transparent,
-                                              width: 1,
+                                              width: 1.0,
                                             ),
                                           ),
                                         ),
@@ -290,8 +320,8 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                             ),
                           ),
                           Container(
-                            width: 100,
-                            height: 100,
+                            width: 100.0,
+                            height: 100.0,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
@@ -306,11 +336,11 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 30),
+                                          0.0, 0.0, 0.0, 30.0),
                                       child: Image.asset(
                                         'assets/images/Beenie-Features_3-1024x1024.png',
-                                        width: 350,
-                                        height: 400,
+                                        width: 350.0,
+                                        height: 400.0,
                                         fit: BoxFit.fitWidth,
                                       ),
                                     ),
@@ -318,20 +348,20 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
                                         'Build relationships',
                                         style: FlutterFlowTheme.of(context)
-                                            .title1
+                                            .displaySmall
                                             .override(
                                               fontFamily: 'Outfit',
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .primaryText,
-                                              fontSize: 32,
+                                              fontSize: 32.0,
                                               fontWeight: FontWeight.w500,
                                             ),
                                       ),
@@ -340,7 +370,7 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
@@ -348,13 +378,13 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                         child: Text(
                                           'Collect details and  start building meaningful relationships. ',
                                           style: FlutterFlowTheme.of(context)
-                                              .subtitle2
+                                              .titleSmall
                                               .override(
                                                 fontFamily: 'Outfit',
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryText,
-                                                fontSize: 16,
+                                                fontSize: 16.0,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                         ),
@@ -364,13 +394,13 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 8),
+                                      20.0, 0.0, 20.0, 8.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 16, 0, 0),
+                                            0.0, 16.0, 0.0, 0.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
                                             FFAppState().update(() {
@@ -381,24 +411,30 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                                           },
                                           text: 'Get Started',
                                           options: FFButtonOptions(
-                                            width: 170,
-                                            height: 50,
+                                            width: 170.0,
+                                            height: 50.0,
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 0.0, 0.0),
+                                            iconPadding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 0.0, 0.0),
                                             color: FlutterFlowTheme.of(context)
-                                                .primaryColor,
+                                                .primary,
                                             textStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .subtitle2
+                                                    .titleSmall
                                                     .override(
                                                       fontFamily: 'Lexend Deca',
                                                       color: Colors.white,
-                                                      fontSize: 16,
+                                                      fontSize: 16.0,
                                                       fontWeight:
                                                           FontWeight.w500,
                                                     ),
-                                            elevation: 2,
+                                            elevation: 2.0,
                                             borderSide: BorderSide(
                                               color: Colors.transparent,
-                                              width: 1,
+                                              width: 1.0,
                                             ),
                                           ),
                                         ),
@@ -414,28 +450,29 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                       Align(
                         alignment: AlignmentDirectional(0.85, 0.7),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 10.0),
                           child: smooth_page_indicator.SmoothPageIndicator(
-                            controller: pageViewController ??=
+                            controller: _model.pageViewController ??=
                                 PageController(initialPage: 0),
                             count: 3,
                             axisDirection: Axis.vertical,
-                            onDotClicked: (i) {
-                              pageViewController!.animateToPage(
+                            onDotClicked: (i) async {
+                              await _model.pageViewController!.animateToPage(
                                 i,
                                 duration: Duration(milliseconds: 500),
                                 curve: Curves.ease,
                               );
                             },
                             effect: smooth_page_indicator.ExpandingDotsEffect(
-                              expansionFactor: 2,
-                              spacing: 8,
-                              radius: 16,
-                              dotWidth: 8,
-                              dotHeight: 8,
+                              expansionFactor: 2.0,
+                              spacing: 8.0,
+                              radius: 16.0,
+                              dotWidth: 8.0,
+                              dotHeight: 8.0,
                               dotColor: Color(0xFF57636C),
                               activeDotColor:
-                                  FlutterFlowTheme.of(context).primaryColor,
+                                  FlutterFlowTheme.of(context).primary,
                               paintStyle: PaintingStyle.fill,
                             ),
                           ),

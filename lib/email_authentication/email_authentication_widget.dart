@@ -1,11 +1,13 @@
-import '../auth/auth_util.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/instant_timer.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/instant_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'email_authentication_model.dart';
+export 'email_authentication_model.dart';
 
 class EmailAuthenticationWidget extends StatefulWidget {
   const EmailAuthenticationWidget({Key? key}) : super(key: key);
@@ -16,21 +18,24 @@ class EmailAuthenticationWidget extends StatefulWidget {
 }
 
 class _EmailAuthenticationWidgetState extends State<EmailAuthenticationWidget> {
-  InstantTimer? checkActivationTimer;
+  late EmailAuthenticationModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => EmailAuthenticationModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      checkActivationTimer = InstantTimer.periodic(
+      _model.checkActivationTimer = InstantTimer.periodic(
         duration: Duration(milliseconds: 1000),
         callback: (timer) async {
           if (currentUserEmailVerified) {
-            checkActivationTimer?.cancel();
+            _model.checkActivationTimer?.cancel();
 
-            context.pushNamed('Home');
+            context.pushNamed('HomeCopy');
 
             return;
           } else {
@@ -46,7 +51,8 @@ class _EmailAuthenticationWidgetState extends State<EmailAuthenticationWidget> {
 
   @override
   void dispose() {
-    checkActivationTimer?.cancel();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -59,18 +65,18 @@ class _EmailAuthenticationWidgetState extends State<EmailAuthenticationWidget> {
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
         child: Align(
-          alignment: AlignmentDirectional(0, 0),
+          alignment: AlignmentDirectional(0.0, 0.0),
           child: Container(
             width: double.infinity,
             height: double.infinity,
             constraints: BoxConstraints(
-              maxWidth: 500,
+              maxWidth: 500.0,
             ),
             decoration: BoxDecoration(
               color: FlutterFlowTheme.of(context).primaryBackground,
             ),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(24, 24, 24, 24),
+              padding: EdgeInsetsDirectional.fromSTEB(24.0, 24.0, 24.0, 24.0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -79,47 +85,49 @@ class _EmailAuthenticationWidgetState extends State<EmailAuthenticationWidget> {
                     children: [
                       Image.asset(
                         'assets/images/Nexl_Final_File_V3_No_Border.png',
-                        height: 30,
+                        height: 30.0,
                         fit: BoxFit.cover,
                       ),
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 44, 0, 0),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 44.0, 0.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          height: 50,
+                          height: 50.0,
                           decoration: BoxDecoration(
                             color:
                                 FlutterFlowTheme.of(context).primaryBackground,
                           ),
-                          alignment: AlignmentDirectional(-1, 0),
+                          alignment: AlignmentDirectional(-1.0, 0.0),
                           child: Text(
                             'Please verify your email',
                             textAlign: TextAlign.center,
-                            style: FlutterFlowTheme.of(context).title1,
+                            style: FlutterFlowTheme.of(context).displaySmall,
                           ),
                         ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Expanded(
                           child: Container(
-                            width: 100,
-                            height: 100,
+                            width: 100.0,
+                            height: 100.0,
                             decoration: BoxDecoration(),
                             child: Text(
                               'Check your inbox for your verification email .  It might be in your spam folder.',
                               textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context).bodyText2,
+                              style: FlutterFlowTheme.of(context).bodySmall,
                             ),
                           ),
                         ),
@@ -127,15 +135,20 @@ class _EmailAuthenticationWidgetState extends State<EmailAuthenticationWidget> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (!FFAppState().reSent)
                           InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onTap: () async {
-                              await sendEmailVerification();
+                              await authManager.sendEmailVerification();
                               FFAppState().update(() {
                                 FFAppState().reSent = true;
                               });
@@ -144,11 +157,10 @@ class _EmailAuthenticationWidgetState extends State<EmailAuthenticationWidget> {
                               'Resend email verification link',
                               textAlign: TextAlign.center,
                               style: FlutterFlowTheme.of(context)
-                                  .bodyText1
+                                  .bodyMedium
                                   .override(
                                     fontFamily: 'Poppins',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryColor,
+                                    color: FlutterFlowTheme.of(context).primary,
                                     decoration: TextDecoration.underline,
                                   ),
                             ),
@@ -157,23 +169,29 @@ class _EmailAuthenticationWidgetState extends State<EmailAuthenticationWidget> {
                           Icon(
                             Icons.check_circle,
                             color: FlutterFlowTheme.of(context).tertiary400,
-                            size: 100,
+                            size: 100.0,
                           ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(16, 50, 12, 12),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 50.0, 12.0, 12.0),
                     child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       onTap: () async {
                         GoRouter.of(context).prepareAuthEvent();
-                        await signOut();
+                        await authManager.signOut();
+                        GoRouter.of(context).clearRedirectLocation();
 
-                        context.goNamedAuth('SignUp', mounted);
+                        context.goNamedAuth('Login', mounted);
                       },
                       child: Text(
                         'Log Out',
-                        style: FlutterFlowTheme.of(context).bodyText2,
+                        style: FlutterFlowTheme.of(context).bodySmall,
                       ),
                     ),
                   ),

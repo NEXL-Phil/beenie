@@ -1,13 +1,16 @@
-import '../auth/firebase_user_provider.dart';
-import '../backend/backend.dart';
-import '../components/contact_sheet_widget.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/base_auth_user_provider.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/contact_sheet_widget.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'contact_added_model.dart';
+export 'contact_added_model.dart';
 
 class ContactAddedWidget extends StatefulWidget {
   const ContactAddedWidget({
@@ -22,21 +25,26 @@ class ContactAddedWidget extends StatefulWidget {
 }
 
 class _ContactAddedWidgetState extends State<ContactAddedWidget> {
+  late ContactAddedModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ContactAddedModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await showModalBottomSheet(
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
+        barrierColor: Color(0x00000000),
         enableDrag: false,
         context: context,
-        builder: (context) {
+        builder: (bottomSheetContext) {
           return Padding(
-            padding: MediaQuery.of(context).viewInsets,
+            padding: MediaQuery.of(bottomSheetContext).viewInsets,
             child: Container(
               height: MediaQuery.of(context).size.height * 0.5,
               child: ContactSheetWidget(
@@ -52,6 +60,13 @@ class _ContactAddedWidgetState extends State<ContactAddedWidget> {
   }
 
   @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
@@ -60,12 +75,12 @@ class _ContactAddedWidgetState extends State<ContactAddedWidget> {
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       body: SafeArea(
         child: Align(
-          alignment: AlignmentDirectional(0, 0),
+          alignment: AlignmentDirectional(0.0, 0.0),
           child: Container(
             width: double.infinity,
             height: double.infinity,
             constraints: BoxConstraints(
-              maxWidth: 500,
+              maxWidth: 500.0,
             ),
             decoration: BoxDecoration(
               color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -75,64 +90,76 @@ class _ContactAddedWidgetState extends State<ContactAddedWidget> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 75, 0, 0),
-                  child: Card(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(70),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(30, 30, 30, 30),
-                      child: Icon(
-                        Icons.check_rounded,
-                        color: Colors.white,
-                        size: 60,
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 75.0, 0.0, 0.0),
+                  child: AuthUserStreamWidget(
+                    builder: (context) => Card(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      color: currentUserDocument!.maincolor,
+                      elevation: 3.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(70.0),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            30.0, 30.0, 30.0, 30.0),
+                        child: Icon(
+                          Icons.check_rounded,
+                          color: Colors.white,
+                          size: 60.0,
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
                   child: Text(
                     'Contact has been added.',
-                    style: FlutterFlowTheme.of(context).title1.override(
+                    style: FlutterFlowTheme.of(context).displaySmall.override(
                           fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme.of(context).primaryColor,
-                          fontSize: 24,
+                          color: FlutterFlowTheme.of(context).textColor,
+                          fontSize: 24.0,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                 ),
                 if (loggedIn)
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
-                    child: FFButtonWidget(
-                      onPressed: () async {
-                        context.pop();
-                      },
-                      text: 'Ok',
-                      options: FFButtonOptions(
-                        width: 130,
-                        height: 40,
-                        color: FlutterFlowTheme.of(context).primaryColor,
-                        textStyle:
-                            FlutterFlowTheme.of(context).subtitle2.override(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.white,
-                                ),
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1,
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
+                    child: AuthUserStreamWidget(
+                      builder: (context) => FFButtonWidget(
+                        onPressed: () async {
+                          context.pop();
+                        },
+                        text: 'Ok',
+                        options: FFButtonOptions(
+                          width: 130.0,
+                          height: 40.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: currentUserDocument!.maincolor,
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'Poppins',
+                                    color: Colors.white,
+                                  ),
+                          elevation: 2.0,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 32),
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 32.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -143,23 +170,27 @@ class _ContactAddedWidgetState extends State<ContactAddedWidget> {
                           },
                           text: 'Learn more about Nexl',
                           options: FFButtonOptions(
-                            width: 230,
-                            height: 50,
+                            width: 230.0,
+                            height: 50.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
                             color:
                                 FlutterFlowTheme.of(context).primaryBackground,
                             textStyle: FlutterFlowTheme.of(context)
-                                .subtitle2
+                                .titleSmall
                                 .override(
                                   fontFamily: 'Lexend Deca',
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,
-                                  fontSize: 16,
+                                  fontSize: 16.0,
                                   fontWeight: FontWeight.w500,
                                 ),
-                            elevation: 0,
+                            elevation: 0.0,
                             borderSide: BorderSide(
                               color: Colors.transparent,
-                              width: 1,
+                              width: 1.0,
                             ),
                           ),
                         ),

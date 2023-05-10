@@ -72,6 +72,12 @@ abstract class ProfilesRecord
 
   DocumentReference? get linkedBeenieCard;
 
+  @BuiltValueField(wireName: 'main_colour')
+  Color? get mainColour;
+
+  @BuiltValueField(wireName: 'secondary_colour')
+  Color? get secondaryColour;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -141,6 +147,8 @@ Map<String, dynamic> createProfilesRecordData({
   String? country,
   DocumentReference? vCardRef,
   DocumentReference? linkedBeenieCard,
+  Color? mainColour,
+  Color? secondaryColour,
 }) {
   final firestoreData = serializers.toFirestore(
     ProfilesRecord.serializer,
@@ -168,7 +176,9 @@ Map<String, dynamic> createProfilesRecordData({
         ..domain = domain
         ..country = country
         ..vCardRef = vCardRef
-        ..linkedBeenieCard = linkedBeenieCard,
+        ..linkedBeenieCard = linkedBeenieCard
+        ..mainColour = mainColour
+        ..secondaryColour = secondaryColour,
     ),
   );
 

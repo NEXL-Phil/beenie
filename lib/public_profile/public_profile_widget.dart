@@ -1,18 +1,20 @@
-import '../auth/auth_util.dart';
-import '../auth/firebase_user_provider.dart';
-import '../backend/backend.dart';
-import '../components/share_contact_sheet_offline_widget.dart';
-import '../components/share_contact_sheet_widget.dart';
-import '../flutter_flow/flutter_flow_animations.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/base_auth_user_provider.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/share_contact_sheet_offline_widget.dart';
+import '/components/share_contact_sheet_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'public_profile_model.dart';
+export 'public_profile_model.dart';
 
 class PublicProfileWidget extends StatefulWidget {
   const PublicProfileWidget({
@@ -30,19 +32,23 @@ class PublicProfileWidget extends StatefulWidget {
 
 class _PublicProfileWidgetState extends State<PublicProfileWidget>
     with TickerProviderStateMixin {
-  ContactsRecord? newContact;
-  final _unfocusNode = FocusNode();
+  late PublicProfileModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => PublicProfileModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -58,28 +64,28 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).primary,
               ),
             ),
           );
         }
         final publicProfileProfilesRecord = snapshot.data!;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          body: SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+          child: Scaffold(
+            key: scaffoldKey,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            body: SafeArea(
               child: Align(
-                alignment: AlignmentDirectional(0, 0),
+                alignment: AlignmentDirectional(0.0, 0.0),
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
                   constraints: BoxConstraints(
-                    maxWidth: 500,
+                    maxWidth: 500.0,
                   ),
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).primaryBackground,
@@ -96,26 +102,30 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    12, 12, 12, 0),
+                                    12.0, 12.0, 12.0, 0.0),
                                 child: InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onTap: () async {
-                                    context.pop();
+                                    context.pushNamed('HomeCopy');
                                   },
                                   child: Icon(
                                     Icons.chevron_left,
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
-                                    size: 24,
+                                    size: 24.0,
                                   ),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 0, 12, 0),
+                                    16.0, 0.0, 12.0, 0.0),
                                 child: Image.network(
                                   '',
-                                  width: 100,
-                                  height: 50,
+                                  width: 100.0,
+                                  height: 50.0,
                                   fit: BoxFit.fitWidth,
                                 ),
                               ),
@@ -126,30 +136,34 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                           children: [
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  16, 12, 16, 12),
+                                  16.0, 12.0, 16.0, 12.0),
                               child: Container(
-                                height: 70,
+                                height: 70.0,
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                   boxShadow: [
                                     BoxShadow(
-                                      blurRadius: 4,
+                                      blurRadius: 4.0,
                                       color: Color(0x1F000000),
-                                      offset: Offset(0, 2),
+                                      offset: Offset(0.0, 2.0),
                                     )
                                   ],
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(8.0),
                                   border: Border.all(
                                     color: FlutterFlowTheme.of(context)
                                         .primaryBackground,
-                                    width: 1,
+                                    width: 1.0,
                                   ),
                                 ),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      12, 0, 12, 0),
+                                      12.0, 0.0, 12.0, 0.0),
                                   child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
                                     onTap: () async {
                                       await launchURL(
                                           'https://${publicProfileProfilesRecord.domain}');
@@ -160,14 +174,15 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                           MainAxisAlignment.start,
                                       children: [
                                         Container(
-                                          width: 40,
-                                          height: 40,
+                                          width: 40.0,
+                                          height: 40.0,
                                           decoration: BoxDecoration(
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryBackground,
                                             shape: BoxShape.circle,
                                           ),
-                                          alignment: AlignmentDirectional(0, 0),
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
                                           child: Stack(
                                             children: [
                                               if (publicProfileProfilesRecord
@@ -177,8 +192,8 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                           .companyLogo !=
                                                       '')
                                                 Container(
-                                                  width: 40,
-                                                  height: 40,
+                                                  width: 40.0,
+                                                  height: 40.0,
                                                   clipBehavior: Clip.antiAlias,
                                                   decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
@@ -196,8 +211,8 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                           .companyLogo ==
                                                       '')
                                                 Container(
-                                                  width: 40,
-                                                  height: 40,
+                                                  width: 40.0,
+                                                  height: 40.0,
                                                   clipBehavior: Clip.antiAlias,
                                                   decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
@@ -213,7 +228,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 12, 12, 12),
+                                                  12.0, 12.0, 12.0, 12.0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -226,14 +241,14 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                     .companyName!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText1,
+                                                        .bodyMedium,
                                               ),
                                               Text(
                                                 publicProfileProfilesRecord
                                                     .country!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyText2,
+                                                        .bodySmall,
                                               ),
                                             ],
                                           ),
@@ -253,7 +268,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 12, 16, 0),
+                                    16.0, 12.0, 16.0, 0.0),
                                 child: Container(
                                   width: double.infinity,
                                   decoration: BoxDecoration(
@@ -261,21 +276,21 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         .secondaryBackground,
                                     boxShadow: [
                                       BoxShadow(
-                                        blurRadius: 4,
+                                        blurRadius: 4.0,
                                         color: Color(0x1F000000),
-                                        offset: Offset(0, 2),
+                                        offset: Offset(0.0, 2.0),
                                       )
                                     ],
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8.0),
                                     border: Border.all(
                                       color: FlutterFlowTheme.of(context)
                                           .primaryBackground,
-                                      width: 1,
+                                      width: 1.0,
                                     ),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        1, 0, 0, 32),
+                                        1.0, 0.0, 0.0, 32.0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       crossAxisAlignment:
@@ -284,15 +299,15 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 16, 0, 0),
+                                                  0.0, 16.0, 0.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
                                               Container(
-                                                width: 120,
-                                                height: 120,
+                                                width: 120.0,
+                                                height: 120.0,
                                                 clipBehavior: Clip.antiAlias,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
@@ -312,7 +327,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 8, 16, 4),
+                                                  12.0, 8.0, 16.0, 4.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -321,7 +336,8 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                               Expanded(
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(4, 12, 12, 12),
+                                                      .fromSTEB(4.0, 12.0, 12.0,
+                                                          12.0),
                                                   child: Column(
                                                     mainAxisSize:
                                                         MainAxisSize.max,
@@ -340,13 +356,16 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .title1,
+                                                                .displaySmall,
                                                       ),
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
-                                                                    0, 4, 0, 0),
+                                                                    0.0,
+                                                                    4.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         child: Text(
                                                           publicProfileProfilesRecord
                                                               .jobTitle!,
@@ -355,7 +374,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                           maxLines: 2,
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .bodyText2,
+                                                              .bodySmall,
                                                         ),
                                                       ),
                                                     ],
@@ -368,7 +387,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 16),
+                                                  0.0, 0.0, 0.0, 16.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -396,13 +415,13 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                               .hasData) {
                                                             return Center(
                                                               child: SizedBox(
-                                                                width: 50,
-                                                                height: 50,
+                                                                width: 50.0,
+                                                                height: 50.0,
                                                                 child:
                                                                     CircularProgressIndicator(
                                                                   color: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .primaryColor,
+                                                                      .primary,
                                                                 ),
                                                               ),
                                                             );
@@ -415,37 +434,125 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                               await launchURL(
                                                                   buttonVCardsRecord
                                                                       .vCardUrl!);
+                                                              if (loggedIn) {
+                                                                await showModalBottomSheet(
+                                                                  isScrollControlled:
+                                                                      true,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  barrierColor:
+                                                                      Color(
+                                                                          0x00000000),
+                                                                  enableDrag:
+                                                                      false,
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (bottomSheetContext) {
+                                                                    return GestureDetector(
+                                                                      onTap: () => FocusScope.of(
+                                                                              context)
+                                                                          .requestFocus(
+                                                                              _unfocusNode),
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            MediaQuery.of(bottomSheetContext).viewInsets,
+                                                                        child:
+                                                                            ShareContactSheetWidget(
+                                                                          profileDoc:
+                                                                              publicProfileProfilesRecord,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ).then((value) =>
+                                                                    setState(
+                                                                        () {}));
+                                                              } else {
+                                                                await showModalBottomSheet(
+                                                                  isScrollControlled:
+                                                                      true,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  barrierColor:
+                                                                      Color(
+                                                                          0x00000000),
+                                                                  enableDrag:
+                                                                      false,
+                                                                  context:
+                                                                      context,
+                                                                  builder:
+                                                                      (bottomSheetContext) {
+                                                                    return GestureDetector(
+                                                                      onTap: () => FocusScope.of(
+                                                                              context)
+                                                                          .requestFocus(
+                                                                              _unfocusNode),
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            MediaQuery.of(bottomSheetContext).viewInsets,
+                                                                        child:
+                                                                            ShareContactSheetOfflineWidget(
+                                                                          profileDoc:
+                                                                              publicProfileProfilesRecord,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ).then((value) =>
+                                                                    setState(
+                                                                        () {}));
+                                                              }
                                                             },
                                                             text:
                                                                 'Download contact',
                                                             options:
                                                                 FFButtonOptions(
-                                                              width: 250,
-                                                              height: 40,
+                                                              width: 250.0,
+                                                              height: 40.0,
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              iconPadding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
                                                               color: FlutterFlowTheme
                                                                       .of(context)
                                                                   .secondaryBackground,
                                                               textStyle:
                                                                   FlutterFlowTheme.of(
                                                                           context)
-                                                                      .subtitle2
+                                                                      .titleSmall
                                                                       .override(
                                                                         fontFamily:
                                                                             'Poppins',
                                                                         color: FlutterFlowTheme.of(context)
                                                                             .primaryText,
                                                                       ),
+                                                              elevation: 2.0,
                                                               borderSide:
                                                                   BorderSide(
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryText,
-                                                                width: 1,
+                                                                width: 1.0,
                                                               ),
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          8),
+                                                                          8.0),
                                                             ),
                                                           );
                                                         },
@@ -493,7 +600,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                           await contactsRecordReference
                                                               .set(
                                                                   contactsCreateData);
-                                                          newContact = ContactsRecord
+                                                          _model.newContact = ContactsRecord
                                                               .getDocumentFromData(
                                                                   contactsCreateData,
                                                                   contactsRecordReference);
@@ -503,15 +610,16 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                             queryParams: {
                                                               'contactDoc':
                                                                   serializeParam(
-                                                                newContact,
+                                                                _model
+                                                                    .newContact,
                                                                 ParamType
                                                                     .Document,
                                                               ),
                                                             }.withoutNulls,
                                                             extra: <String,
                                                                 dynamic>{
-                                                              'contactDoc':
-                                                                  newContact,
+                                                              'contactDoc': _model
+                                                                  .newContact,
                                                             },
                                                           );
 
@@ -520,15 +628,29 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                         text: 'Add contact',
                                                         options:
                                                             FFButtonOptions(
-                                                          width: 250,
-                                                          height: 40,
+                                                          width: 250.0,
+                                                          height: 40.0,
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          iconPadding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0),
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .secondaryBackground,
                                                           textStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
-                                                                  .subtitle2
+                                                                  .titleSmall
                                                                   .override(
                                                                     fontFamily:
                                                                         'Poppins',
@@ -536,16 +658,18 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                                             context)
                                                                         .primaryText,
                                                                   ),
+                                                          elevation: 2.0,
                                                           borderSide:
                                                               BorderSide(
                                                             color: FlutterFlowTheme
                                                                     .of(context)
                                                                 .primaryText,
-                                                            width: 1,
+                                                            width: 1.0,
                                                           ),
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(8),
+                                                                  .circular(
+                                                                      8.0),
                                                         ),
                                                         showLoadingIndicator:
                                                             false,
@@ -554,7 +678,10 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  0, 8, 0, 0),
+                                                                  0.0,
+                                                                  8.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       child: FFButtonWidget(
                                                         onPressed: () async {
                                                           if (loggedIn) {
@@ -564,18 +691,27 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                               backgroundColor:
                                                                   Colors
                                                                       .transparent,
+                                                              barrierColor: Color(
+                                                                  0x00000000),
                                                               enableDrag: false,
                                                               context: context,
                                                               builder:
-                                                                  (context) {
-                                                                return Padding(
-                                                                  padding: MediaQuery.of(
+                                                                  (bottomSheetContext) {
+                                                                return GestureDetector(
+                                                                  onTap: () => FocusScope.of(
                                                                           context)
-                                                                      .viewInsets,
+                                                                      .requestFocus(
+                                                                          _unfocusNode),
                                                                   child:
-                                                                      ShareContactSheetWidget(
-                                                                    profileDoc:
-                                                                        publicProfileProfilesRecord,
+                                                                      Padding(
+                                                                    padding: MediaQuery.of(
+                                                                            bottomSheetContext)
+                                                                        .viewInsets,
+                                                                    child:
+                                                                        ShareContactSheetWidget(
+                                                                      profileDoc:
+                                                                          publicProfileProfilesRecord,
+                                                                    ),
                                                                   ),
                                                                 );
                                                               },
@@ -589,18 +725,27 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                               backgroundColor:
                                                                   Colors
                                                                       .transparent,
+                                                              barrierColor: Color(
+                                                                  0x00000000),
                                                               enableDrag: false,
                                                               context: context,
                                                               builder:
-                                                                  (context) {
-                                                                return Padding(
-                                                                  padding: MediaQuery.of(
+                                                                  (bottomSheetContext) {
+                                                                return GestureDetector(
+                                                                  onTap: () => FocusScope.of(
                                                                           context)
-                                                                      .viewInsets,
+                                                                      .requestFocus(
+                                                                          _unfocusNode),
                                                                   child:
-                                                                      ShareContactSheetOfflineWidget(
-                                                                    profileDoc:
-                                                                        publicProfileProfilesRecord,
+                                                                      Padding(
+                                                                    padding: MediaQuery.of(
+                                                                            bottomSheetContext)
+                                                                        .viewInsets,
+                                                                    child:
+                                                                        ShareContactSheetOfflineWidget(
+                                                                      profileDoc:
+                                                                          publicProfileProfilesRecord,
+                                                                    ),
                                                                   ),
                                                                 );
                                                               },
@@ -613,30 +758,46 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                             'Share my details',
                                                         options:
                                                             FFButtonOptions(
-                                                          width: 250,
-                                                          height: 40,
+                                                          width: 250.0,
+                                                          height: 40.0,
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          iconPadding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0),
                                                           color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .primaryColor,
+                                                              .primary,
                                                           textStyle:
                                                               FlutterFlowTheme.of(
                                                                       context)
-                                                                  .subtitle2
+                                                                  .titleSmall
                                                                   .override(
                                                                     fontFamily:
                                                                         'Poppins',
                                                                     color: Colors
                                                                         .white,
                                                                   ),
+                                                          elevation: 2.0,
                                                           borderSide:
                                                               BorderSide(
                                                             color: Colors
                                                                 .transparent,
-                                                            width: 1,
+                                                            width: 1.0,
                                                           ),
                                                           borderRadius:
                                                               BorderRadius
-                                                                  .circular(8),
+                                                                  .circular(
+                                                                      8.0),
                                                         ),
                                                       ),
                                                     ),
@@ -653,7 +814,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                           Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    12, 0, 12, 0),
+                                                    12.0, 0.0, 12.0, 0.0),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
@@ -661,9 +822,10 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                   child: Container(
                                                     width:
                                                         MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    height: 100,
+                                                                .size
+                                                                .width *
+                                                            1.0,
+                                                    height: 100.0,
                                                     decoration: BoxDecoration(
                                                       color: FlutterFlowTheme
                                                               .of(context)
@@ -673,7 +835,10 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  0, 16, 0, 0),
+                                                                  0.0,
+                                                                  16.0,
+                                                                  0.0,
+                                                                  16.0),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -685,10 +850,10 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        0,
-                                                                        8,
-                                                                        0,
-                                                                        0),
+                                                                        0.0,
+                                                                        8.0,
+                                                                        0.0,
+                                                                        0.0),
                                                             child: Text(
                                                               'About',
                                                               textAlign:
@@ -696,24 +861,24 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                                       .start,
                                                               style: FlutterFlowTheme
                                                                       .of(context)
-                                                                  .subtitle1,
+                                                                  .titleMedium,
                                                             ),
                                                           ),
                                                           Padding(
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        0,
-                                                                        4,
-                                                                        0,
-                                                                        0),
+                                                                        0.0,
+                                                                        4.0,
+                                                                        0.0,
+                                                                        0.0),
                                                             child: Text(
                                                               publicProfileProfilesRecord
                                                                   .bio!,
                                                               maxLines: 4,
                                                               style: FlutterFlowTheme
                                                                       .of(context)
-                                                                  .bodyText2,
+                                                                  .bodySmall,
                                                             ),
                                                           ),
                                                         ],
@@ -727,7 +892,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 0, 12, 0),
+                                                  12.0, 16.0, 12.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -741,8 +906,8 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                   child: Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 16, 0, 0),
+                                                            .fromSTEB(0.0, 16.0,
+                                                                0.0, 0.0),
                                                     child: FFButtonWidget(
                                                       onPressed: () async {
                                                         await launchURL(
@@ -751,28 +916,43 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       },
                                                       text: 'LinkedIn',
                                                       options: FFButtonOptions(
-                                                        width: 130,
-                                                        height: 40,
+                                                        width: 130.0,
+                                                        height: 40.0,
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        iconPadding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         color:
                                                             Color(0xFF0077B5),
                                                         textStyle:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .subtitle2
+                                                                .titleSmall
                                                                 .override(
                                                                   fontFamily:
                                                                       'Poppins',
                                                                   color: Colors
                                                                       .white,
                                                                 ),
+                                                        elevation: 2.0,
                                                         borderSide: BorderSide(
                                                           color: Colors
                                                               .transparent,
-                                                          width: 1,
+                                                          width: 1.0,
                                                         ),
                                                         borderRadius:
                                                             BorderRadius
-                                                                .circular(8),
+                                                                .circular(8.0),
                                                       ),
                                                     ),
                                                   ),
@@ -783,7 +963,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 32, 12, 0),
+                                                  12.0, 32.0, 12.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -798,13 +978,16 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  0, 16, 0, 0),
+                                                                  0.0,
+                                                                  16.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       child: Text(
                                                         'Email',
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText2,
+                                                                .bodySmall,
                                                       ),
                                                     ),
                                                     Text(
@@ -813,7 +996,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText1,
+                                                              .bodyMedium,
                                                     ),
                                                   ],
                                                 ),
@@ -824,7 +1007,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 16, 12, 0),
+                                                  12.0, 16.0, 12.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -840,7 +1023,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText2,
+                                                              .bodySmall,
                                                     ),
                                                     Text(
                                                       publicProfileProfilesRecord
@@ -848,7 +1031,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText1,
+                                                              .bodyMedium,
                                                     ),
                                                   ],
                                                 ),
@@ -859,7 +1042,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  12, 16, 12, 0),
+                                                  12.0, 16.0, 12.0, 0.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -875,7 +1058,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText2,
+                                                              .bodySmall,
                                                     ),
                                                     Text(
                                                       publicProfileProfilesRecord
@@ -883,7 +1066,7 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .bodyText1,
+                                                              .bodyMedium,
                                                     ),
                                                   ],
                                                 ),
@@ -897,13 +1080,17 @@ class _PublicProfileWidgetState extends State<PublicProfileWidget>
                                 ),
                               ),
                               InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                                 onTap: () async {
                                   await launchURL('https://nexl.cloud');
                                 },
                                 child: Image.network(
                                   'https://firebasestorage.googleapis.com/v0/b/nexl-business-card.appspot.com/o/public%2FNexl%20Final%20File%20V3%20No%20Border%20-%20small.png?alt=media&token=0ade3e19-b575-4ce9-b495-d78769e338f8',
-                                  width: 100,
-                                  height: 100,
+                                  width: 100.0,
+                                  height: 100.0,
                                   fit: BoxFit.contain,
                                 ),
                               ),

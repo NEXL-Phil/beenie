@@ -1,12 +1,12 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../components/contact_sheet_widget.dart';
-import '../flutter_flow/flutter_flow_animations.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
-import '../flutter_flow/custom_functions.dart' as functions;
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/components/contact_sheet_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +16,8 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:text_search/text_search.dart';
+import 'my_contacts_model.dart';
+export 'my_contacts_model.dart';
 
 class MyContactsWidget extends StatefulWidget {
   const MyContactsWidget({Key? key}) : super(key: key);
@@ -26,16 +28,16 @@ class MyContactsWidget extends StatefulWidget {
 
 class _MyContactsWidgetState extends State<MyContactsWidget>
     with TickerProviderStateMixin {
-  ContactsRecord? newContact;
-  var profileURL = '';
-  List<ContactsRecord> simpleSearchResults = [];
-  TextEditingController? textController;
-  final _unfocusNode = FocusNode();
+  late MyContactsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => MyContactsModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       setState(() {
@@ -43,14 +45,15 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
       });
     });
 
-    textController = TextEditingController();
+    _model.textController ??= TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    textController?.dispose();
     super.dispose();
   }
 
@@ -67,53 +70,53 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50,
-              height: 50,
+              width: 50.0,
+              height: 50.0,
               child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).primaryColor,
+                color: FlutterFlowTheme.of(context).primary,
               ),
             ),
           );
         }
         List<ContactsRecord> myContactsContactsRecordList = snapshot.data!;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-          appBar: AppBar(
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+          child: Scaffold(
+            key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 60,
-              icon: Icon(
-                Icons.arrow_back_rounded,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 30,
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              automaticallyImplyLeading: false,
+              leading: FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30.0,
+                borderWidth: 1.0,
+                buttonSize: 60.0,
+                icon: Icon(
+                  Icons.arrow_back_rounded,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 30.0,
+                ),
+                onPressed: () async {
+                  context.pushNamed('HomeCopy');
+                },
               ),
-              onPressed: () async {
-                context.pushNamed('Home');
-              },
+              title: Text(
+                'My Contacts',
+                style: FlutterFlowTheme.of(context).headlineSmall,
+              ),
+              actions: [],
+              centerTitle: false,
+              elevation: 0.0,
             ),
-            title: Text(
-              'My Contacts',
-              style: FlutterFlowTheme.of(context).title3,
-            ),
-            actions: [],
-            centerTitle: false,
-            elevation: 0,
-          ),
-          body: SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+            body: SafeArea(
               child: Align(
-                alignment: AlignmentDirectional(0, 0),
+                alignment: AlignmentDirectional(0.0, 0.0),
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
                   constraints: BoxConstraints(
-                    maxWidth: 500,
+                    maxWidth: 500.0,
                   ),
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).primaryBtnText,
@@ -123,15 +126,16 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 4, 16, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 4.0, 16.0, 0.0),
                         child: TextFormField(
-                          controller: textController,
+                          controller: _model.textController,
                           onChanged: (_) => EasyDebounce.debounce(
-                            'textController',
+                            '_model.textController',
                             Duration(milliseconds: 2000),
                             () async {
-                              if (textController!.text != null &&
-                                  textController!.text != '') {
+                              if (_model.textController.text != null &&
+                                  _model.textController.text != '') {
                                 FFAppState().update(() {
                                   FFAppState().viewAll = false;
                                 });
@@ -142,7 +146,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                               }
 
                               setState(() {
-                                simpleSearchResults = TextSearch(
+                                _model.simpleSearchResults = TextSearch(
                                   myContactsContactsRecordList
                                       .map(
                                         (record) => TextSearchItem(record, [
@@ -154,7 +158,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                       )
                                       .toList(),
                                 )
-                                    .search(textController!.text)
+                                    .search(_model.textController.text)
                                     .map((r) => r.object)
                                     .toList();
                               });
@@ -163,34 +167,34 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Search for contacts...',
-                            labelStyle: FlutterFlowTheme.of(context).bodyText2,
+                            labelStyle: FlutterFlowTheme.of(context).bodySmall,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                             errorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
                                 color: Color(0x00000000),
-                                width: 1,
+                                width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(30.0),
                             ),
                             filled: true,
                             fillColor:
@@ -199,12 +203,12 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                               Icons.search_outlined,
                               color: FlutterFlowTheme.of(context).secondaryText,
                             ),
-                            suffixIcon: textController!.text.isNotEmpty
+                            suffixIcon: _model.textController!.text.isNotEmpty
                                 ? InkWell(
                                     onTap: () async {
-                                      textController?.clear();
-                                      if (textController!.text != null &&
-                                          textController!.text != '') {
+                                      _model.textController?.clear();
+                                      if (_model.textController.text != null &&
+                                          _model.textController.text != '') {
                                         FFAppState().update(() {
                                           FFAppState().viewAll = false;
                                         });
@@ -215,7 +219,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                       }
 
                                       setState(() {
-                                        simpleSearchResults = TextSearch(
+                                        _model.simpleSearchResults = TextSearch(
                                           myContactsContactsRecordList
                                               .map(
                                                 (record) => TextSearchItem(
@@ -228,7 +232,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                               )
                                               .toList(),
                                         )
-                                            .search(textController!.text)
+                                            .search(_model.textController.text)
                                             .map((r) => r.object)
                                             .toList();
                                       });
@@ -237,12 +241,14 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                     child: Icon(
                                       Icons.clear,
                                       color: Color(0xFF757575),
-                                      size: 22,
+                                      size: 22.0,
                                     ),
                                   )
                                 : null,
                           ),
-                          style: FlutterFlowTheme.of(context).bodyText1,
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          validator: _model.textControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                       if (FFAppState().viewAll)
@@ -251,16 +257,16 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 12, 0, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 12.0, 0.0, 0.0),
                               child: Text(
                                 'All Contacts',
-                                style: FlutterFlowTheme.of(context).bodyText2,
+                                style: FlutterFlowTheme.of(context).bodySmall,
                               ),
                             ),
                             Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(4, 12, 16, 0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  4.0, 12.0, 16.0, 0.0),
                               child: Text(
                                 valueOrDefault<String>(
                                   functions
@@ -270,11 +276,10 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                   '0',
                                 ),
                                 style: FlutterFlowTheme.of(context)
-                                    .bodyText2
+                                    .bodySmall
                                     .override(
                                       fontFamily: 'Poppins',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryColor,
+                                      color: FFAppState().maincolorstate,
                                     ),
                               ),
                             ),
@@ -283,7 +288,8 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                       if (FFAppState().viewAll)
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                8.0, 8.0, 8.0, 0.0),
                             child: StreamBuilder<List<ContactsRecord>>(
                               stream: queryContactsRecord(
                                 parent: currentUserReference,
@@ -295,11 +301,11 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                 if (!snapshot.hasData) {
                                   return Center(
                                     child: SizedBox(
-                                      width: 50,
-                                      height: 50,
+                                      width: 50.0,
+                                      height: 50.0,
                                       child: CircularProgressIndicator(
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
+                                            .primary,
                                       ),
                                     ),
                                   );
@@ -318,27 +324,38 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                             listViewAllIndex];
                                     return Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 1),
+                                          0.0, 0.0, 0.0, 1.0),
                                       child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
                                         onTap: () async {
                                           await showModalBottomSheet(
                                             isScrollControlled: true,
                                             backgroundColor: Colors.transparent,
                                             barrierColor: Color(0xB3090F13),
                                             context: context,
-                                            builder: (context) {
-                                              return Padding(
-                                                padding: MediaQuery.of(context)
-                                                    .viewInsets,
-                                                child: Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.8,
-                                                  child: ContactSheetWidget(
-                                                    contactReference:
-                                                        listViewAllContactsRecord
-                                                            .reference,
+                                            builder: (bottomSheetContext) {
+                                              return GestureDetector(
+                                                onTap: () => FocusScope.of(
+                                                        context)
+                                                    .requestFocus(_unfocusNode),
+                                                child: Padding(
+                                                  padding: MediaQuery.of(
+                                                          bottomSheetContext)
+                                                      .viewInsets,
+                                                  child: Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.8,
+                                                    child: ContactSheetWidget(
+                                                      contactReference:
+                                                          listViewAllContactsRecord
+                                                              .reference,
+                                                    ),
                                                   ),
                                                 ),
                                               );
@@ -346,38 +363,39 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                           ).then((value) => setState(() {}));
                                         },
                                         child: Container(
-                                          width: 100,
+                                          width: 100.0,
                                           decoration: BoxDecoration(
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryBackground,
                                             boxShadow: [
                                               BoxShadow(
-                                                blurRadius: 0,
+                                                blurRadius: 0.0,
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .lineColor,
-                                                offset: Offset(0, 1),
+                                                offset: Offset(0.0, 1.0),
                                               )
                                             ],
                                           ),
                                           child: Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    8, 8, 8, 8),
+                                                    8.0, 8.0, 8.0, 8.0),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(40),
+                                                      BorderRadius.circular(
+                                                          40.0),
                                                   child: Image.network(
                                                     valueOrDefault<String>(
                                                       listViewAllContactsRecord
                                                           .contactImage,
                                                       'https://firebasestorage.googleapis.com/v0/b/nexl-business-card.appspot.com/o/public%2FcontactDefault.jpeg?alt=media&token=75fd5b20-43da-41b7-b9a3-11dc60788acd',
                                                     ),
-                                                    width: 60,
-                                                    height: 60,
+                                                    width: 60.0,
+                                                    height: 60.0,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -392,20 +410,26 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(12, 0,
-                                                                    0, 0),
+                                                                .fromSTEB(
+                                                                    12.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         child: Text(
                                                           '${listViewAllContactsRecord.firstName} ${listViewAllContactsRecord.lastName}',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .subtitle1,
+                                                              .titleMedium,
                                                         ),
                                                       ),
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
-                                                                    0, 4, 0, 0),
+                                                                    0.0,
+                                                                    4.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         child: Row(
                                                           mainAxisSize:
                                                               MainAxisSize.max,
@@ -414,26 +438,26 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                               padding:
                                                                   EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          12,
-                                                                          0,
-                                                                          0,
-                                                                          0),
+                                                                          12.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
                                                               child: Text(
                                                                 listViewAllContactsRecord
                                                                     .mobilePhone!,
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .bodyText2,
+                                                                    .bodySmall,
                                                               ),
                                                             ),
                                                             Padding(
                                                               padding:
                                                                   EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          4,
-                                                                          0,
-                                                                          0,
-                                                                          0),
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
                                                               child: Text(
                                                                 listViewAllContactsRecord
                                                                     .emailAddress!
@@ -444,7 +468,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                                 ),
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .bodyText2,
+                                                                    .bodySmall,
                                                               ),
                                                             ),
                                                           ],
@@ -459,17 +483,17 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .primaryBackground,
-                                                  elevation: 1,
+                                                  elevation: 1.0,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            40),
+                                                            40.0),
                                                   ),
                                                   child: Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                4, 4, 4, 4),
+                                                            .fromSTEB(4.0, 4.0,
+                                                                4.0, 4.0),
                                                     child: Icon(
                                                       Icons
                                                           .keyboard_arrow_right_rounded,
@@ -477,7 +501,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .secondaryText,
-                                                      size: 24,
+                                                      size: 24.0,
                                                     ),
                                                   ),
                                                 ),
@@ -496,10 +520,12 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                       if (!FFAppState().viewAll)
                         Expanded(
                           child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                8.0, 8.0, 8.0, 0.0),
                             child: Builder(
                               builder: (context) {
-                                final contacts = simpleSearchResults.toList();
+                                final contacts =
+                                    _model.simpleSearchResults.toList();
                                 return ListView.builder(
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
@@ -510,8 +536,12 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                         contacts[contactsIndex];
                                     return Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 1),
+                                          0.0, 0.0, 0.0, 1.0),
                                       child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
                                         onTap: () async {
                                           await showModalBottomSheet(
                                             isScrollControlled: true,
@@ -519,18 +549,26 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                             barrierColor: Color(0xB3090F13),
                                             enableDrag: false,
                                             context: context,
-                                            builder: (context) {
-                                              return Padding(
-                                                padding: MediaQuery.of(context)
-                                                    .viewInsets,
-                                                child: Container(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.8,
-                                                  child: ContactSheetWidget(
-                                                    contactReference:
-                                                        contactsItem.reference,
+                                            builder: (bottomSheetContext) {
+                                              return GestureDetector(
+                                                onTap: () => FocusScope.of(
+                                                        context)
+                                                    .requestFocus(_unfocusNode),
+                                                child: Padding(
+                                                  padding: MediaQuery.of(
+                                                          bottomSheetContext)
+                                                      .viewInsets,
+                                                  child: Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.8,
+                                                    child: ContactSheetWidget(
+                                                      contactReference:
+                                                          contactsItem
+                                                              .reference,
+                                                    ),
                                                   ),
                                                 ),
                                               );
@@ -538,37 +576,38 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                           ).then((value) => setState(() {}));
                                         },
                                         child: Container(
-                                          width: 100,
+                                          width: 100.0,
                                           decoration: BoxDecoration(
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryBackground,
                                             boxShadow: [
                                               BoxShadow(
-                                                blurRadius: 0,
+                                                blurRadius: 0.0,
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .lineColor,
-                                                offset: Offset(0, 1),
+                                                offset: Offset(0.0, 1.0),
                                               )
                                             ],
                                           ),
                                           child: Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    8, 8, 8, 8),
+                                                    8.0, 8.0, 8.0, 8.0),
                                             child: Row(
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(40),
+                                                      BorderRadius.circular(
+                                                          40.0),
                                                   child: Image.network(
                                                     valueOrDefault<String>(
                                                       contactsItem.contactImage,
                                                       'https://firebasestorage.googleapis.com/v0/b/nexl-business-card.appspot.com/o/public%2FcontactDefault.jpeg?alt=media&token=75fd5b20-43da-41b7-b9a3-11dc60788acd',
                                                     ),
-                                                    width: 60,
-                                                    height: 60,
+                                                    width: 60.0,
+                                                    height: 60.0,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
@@ -583,20 +622,26 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(12, 0,
-                                                                    0, 0),
+                                                                .fromSTEB(
+                                                                    12.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         child: Text(
                                                           '${contactsItem.firstName} ${contactsItem.lastName}',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .subtitle1,
+                                                              .titleMedium,
                                                         ),
                                                       ),
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
-                                                                    0, 4, 0, 0),
+                                                                    0.0,
+                                                                    4.0,
+                                                                    0.0,
+                                                                    0.0),
                                                         child: Row(
                                                           mainAxisSize:
                                                               MainAxisSize.max,
@@ -605,26 +650,26 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                               padding:
                                                                   EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          12,
-                                                                          0,
-                                                                          0,
-                                                                          0),
+                                                                          12.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
                                                               child: Text(
                                                                 contactsItem
                                                                     .mobilePhone!,
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .bodyText2,
+                                                                    .bodySmall,
                                                               ),
                                                             ),
                                                             Padding(
                                                               padding:
                                                                   EdgeInsetsDirectional
                                                                       .fromSTEB(
-                                                                          4,
-                                                                          0,
-                                                                          0,
-                                                                          0),
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
                                                               child: Text(
                                                                 contactsItem
                                                                     .emailAddress!
@@ -635,7 +680,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                                 ),
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .bodyText2,
+                                                                    .bodySmall,
                                                               ),
                                                             ),
                                                           ],
@@ -650,17 +695,17 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .primaryBackground,
-                                                  elevation: 1,
+                                                  elevation: 1.0,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            40),
+                                                            40.0),
                                                   ),
                                                   child: Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                4, 4, 4, 4),
+                                                            .fromSTEB(4.0, 4.0,
+                                                                4.0, 4.0),
                                                     child: Icon(
                                                       Icons
                                                           .keyboard_arrow_right_rounded,
@@ -668,7 +713,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .secondaryText,
-                                                      size: 24,
+                                                      size: 24.0,
                                                     ),
                                                   ),
                                                 ),
@@ -685,23 +730,24 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                           ),
                         ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 0.0, 16.0, 0.0),
                         child: Container(
-                          width: MediaQuery.of(context).size.width,
+                          width: MediaQuery.of(context).size.width * 1.0,
                           decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context).primaryText,
+                            color: FFAppState().maincolorstate,
                             boxShadow: [
                               BoxShadow(
-                                blurRadius: 4,
+                                blurRadius: 4.0,
                                 color: Color(0x55000000),
-                                offset: Offset(0, 2),
+                                offset: Offset(0.0, 2.0),
                               )
                             ],
-                            borderRadius: BorderRadius.circular(40),
+                            borderRadius: BorderRadius.circular(40.0),
                           ),
                           child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(24, 16, 16, 16),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                24.0, 16.0, 16.0, 16.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -722,8 +768,12 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                               desktop: false,
                                             ))
                                           InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
                                             onTap: () async {
-                                              profileURL =
+                                              _model.profileURL =
                                                   await FlutterBarcodeScanner
                                                       .scanBarcode(
                                                 '#C62828', // scanning line color
@@ -733,11 +783,11 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                               );
 
                                               context.pushNamed(
-                                                'publicProfile',
+                                                'PublicProfileC',
                                                 params: {
                                                   'profile': serializeParam(
                                                     functions.getProfileFromURL(
-                                                        profileURL!),
+                                                        _model.profileURL!),
                                                     ParamType.DocumentReference,
                                                   ),
                                                 }.withoutNulls,
@@ -749,13 +799,13 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                               'Scan QR code',
                                               style: FlutterFlowTheme.of(
                                                       context)
-                                                  .subtitle1
+                                                  .titleMedium
                                                   .override(
                                                     fontFamily: 'Outfit',
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .primaryBackground,
-                                                    fontSize: 20,
+                                                    fontSize: 20.0,
                                                     fontWeight: FontWeight.w500,
                                                     decoration: TextDecoration
                                                         .underline,
@@ -775,7 +825,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                             currentUserReference!);
                                     await contactsRecordReference
                                         .set(contactsCreateData);
-                                    newContact =
+                                    _model.newContact =
                                         ContactsRecord.getDocumentFromData(
                                             contactsCreateData,
                                             contactsRecordReference);
@@ -784,7 +834,7 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                       'editContact',
                                       queryParams: {
                                         'contactRef': serializeParam(
-                                          newContact!.reference,
+                                          _model.newContact!.reference,
                                           ParamType.DocumentReference,
                                         ),
                                         'isNew': serializeParam(
@@ -798,24 +848,28 @@ class _MyContactsWidgetState extends State<MyContactsWidget>
                                   },
                                   text: '+ Add contact',
                                   options: FFButtonOptions(
-                                    width: 130,
-                                    height: 50,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryColor,
+                                    width: 130.0,
+                                    height: 50.0,
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    color: FlutterFlowTheme.of(context).white,
                                     textStyle: FlutterFlowTheme.of(context)
-                                        .subtitle2
+                                        .titleSmall
                                         .override(
                                           fontFamily: 'Outfit',
-                                          color: Colors.white,
-                                          fontSize: 16,
+                                          color: FlutterFlowTheme.of(context)
+                                              .textColor,
+                                          fontSize: 16.0,
                                           fontWeight: FontWeight.normal,
                                         ),
-                                    elevation: 3,
+                                    elevation: 3.0,
                                     borderSide: BorderSide(
                                       color: Colors.transparent,
-                                      width: 1,
+                                      width: 1.0,
                                     ),
-                                    borderRadius: BorderRadius.circular(100),
+                                    borderRadius: BorderRadius.circular(100.0),
                                   ),
                                 ),
                               ],

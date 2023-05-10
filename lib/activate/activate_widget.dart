@@ -1,14 +1,16 @@
-import '../auth/auth_util.dart';
-import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_widgets.dart';
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'activate_model.dart';
+export 'activate_model.dart';
 
 class ActivateWidget extends StatefulWidget {
   const ActivateWidget({
@@ -23,13 +25,15 @@ class ActivateWidget extends StatefulWidget {
 }
 
 class _ActivateWidgetState extends State<ActivateWidget> {
-  BeeniecardsRecord? beenieCard;
+  late ActivateModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  BeeniecardsRecord? beenieCardButton;
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ActivateModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(milliseconds: 300));
@@ -42,11 +46,11 @@ class _ActivateWidgetState extends State<ActivateWidget> {
       );
       var beeniecardsRecordReference = BeeniecardsRecord.collection.doc();
       await beeniecardsRecordReference.set(beeniecardsCreateData);
-      beenieCard = BeeniecardsRecord.getDocumentFromData(
+      _model.beenieCard = BeeniecardsRecord.getDocumentFromData(
           beeniecardsCreateData, beeniecardsRecordReference);
 
       final profilesUpdateData = createProfilesRecordData(
-        linkedBeenieCard: beenieCard!.reference,
+        linkedBeenieCard: _model.beenieCard!.reference,
       );
       await currentUserDocument!.profile!.update(profilesUpdateData);
 
@@ -54,6 +58,13 @@ class _ActivateWidgetState extends State<ActivateWidget> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -65,7 +76,7 @@ class _ActivateWidgetState extends State<ActivateWidget> {
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 75, 0, 0),
+          padding: EdgeInsetsDirectional.fromSTEB(0.0, 75.0, 0.0, 0.0),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -75,60 +86,61 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width * 1.0,
                     constraints: BoxConstraints(
-                      maxWidth: 500,
+                      maxWidth: 500.0,
                     ),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Container(
                       constraints: BoxConstraints(
-                        maxWidth: 500,
+                        maxWidth: 500.0,
                       ),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 4, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 4.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 50, 0, 0),
+                                      0.0, 50.0, 0.0, 0.0),
                                   child: Text(
-                                    'Activiating your card...',
-                                    style: FlutterFlowTheme.of(context).title1,
+                                    'Activating your card...',
+                                    style: FlutterFlowTheme.of(context)
+                                        .displaySmall,
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 12.0, 0.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                  width: 330,
-                                  height: 180,
+                                  width: 330.0,
+                                  height: 180.0,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(12.0),
                                   ),
                                   child: Card(
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     color: Color(0xFFEBB108),
-                                    elevation: 6,
+                                    elevation: 6.0,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     child: Stack(
                                       children: [
@@ -140,7 +152,7 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                                               currentUserDisplayName,
                                               style:
                                                   FlutterFlowTheme.of(context)
-                                                      .title1
+                                                      .displaySmall
                                                       .override(
                                                         fontFamily: 'Poppins',
                                                         color: FlutterFlowTheme
@@ -157,11 +169,11 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                                             'Card ID',
                                             textAlign: TextAlign.start,
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1
+                                                .bodyMedium
                                                 .override(
                                                   fontFamily: 'Lexend Deca',
                                                   color: Colors.white,
-                                                  fontSize: 14,
+                                                  fontSize: 14.0,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                           ),
@@ -172,11 +184,11 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                                           child: Text(
                                             widget.cardID!,
                                             style: FlutterFlowTheme.of(context)
-                                                .bodyText1
+                                                .bodyMedium
                                                 .override(
                                                   fontFamily: 'Lexend Deca',
                                                   color: Color(0x7EFFFFFF),
-                                                  fontSize: 14,
+                                                  fontSize: 14.0,
                                                   fontWeight: FontWeight.normal,
                                                 ),
                                           ),
@@ -186,7 +198,7 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                                               AlignmentDirectional(0.91, 0.29),
                                           child: Image.network(
                                             'https://firebasestorage.googleapis.com/v0/b/nexl-business-card.appspot.com/o/public%2Fbeenie_bee%202.jpg?alt=media&token=1680160b-7b89-4a8b-8865-b76a8c0ffe12',
-                                            width: 100,
+                                            width: 100.0,
                                             height: 176.1,
                                             fit: BoxFit.contain,
                                           ),
@@ -199,16 +211,16 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 24, 0, 75),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 24.0, 0.0, 75.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 LinearPercentIndicator(
-                                  percent: 1,
-                                  width: 250,
-                                  lineHeight: 24,
+                                  percent: 1.0,
+                                  width: 250.0,
+                                  lineHeight: 24.0,
                                   animation: true,
                                   progressColor:
                                       FlutterFlowTheme.of(context).tertiary400,
@@ -216,22 +228,22 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                                   center: Text(
                                     'Activating beenie card',
                                     style: FlutterFlowTheme.of(context)
-                                        .bodyText1
+                                        .bodyMedium
                                         .override(
                                           fontFamily: 'Poppins',
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
                                         ),
                                   ),
-                                  barRadius: Radius.circular(25),
+                                  barRadius: Radius.circular(25.0),
                                   padding: EdgeInsets.zero,
                                 ),
                               ],
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 35),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 35.0),
                             child: FFButtonWidget(
                               onPressed: () async {
                                 final beeniecardsCreateData =
@@ -245,14 +257,15 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                                     BeeniecardsRecord.collection.doc();
                                 await beeniecardsRecordReference
                                     .set(beeniecardsCreateData);
-                                beenieCardButton =
+                                _model.beenieCardButton =
                                     BeeniecardsRecord.getDocumentFromData(
                                         beeniecardsCreateData,
                                         beeniecardsRecordReference);
 
                                 final profilesUpdateData =
                                     createProfilesRecordData(
-                                  linkedBeenieCard: beenieCardButton!.reference,
+                                  linkedBeenieCard:
+                                      _model.beenieCardButton!.reference,
                                 );
                                 await currentUserDocument!.profile!
                                     .update(profilesUpdateData);
@@ -263,21 +276,25 @@ class _ActivateWidgetState extends State<ActivateWidget> {
                               },
                               text: 'Next >',
                               options: FFButtonOptions(
-                                width: 200,
-                                height: 40,
-                                color:
-                                    FlutterFlowTheme.of(context).tertiaryColor,
+                                width: 200.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FFAppState().maincolorstate,
                                 textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
+                                    .titleSmall
                                     .override(
                                       fontFamily: 'Poppins',
                                       color: Colors.white,
                                     ),
+                                elevation: 2.0,
                                 borderSide: BorderSide(
                                   color: Colors.transparent,
-                                  width: 1,
+                                  width: 1.0,
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),

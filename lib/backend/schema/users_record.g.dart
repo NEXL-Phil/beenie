@@ -69,6 +69,13 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
+    value = object.maincolor;
+    if (value != null) {
+      result
+        ..add('maincolor')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(Color)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -121,6 +128,10 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
+        case 'maincolor':
+          result.maincolor = serializers.deserialize(value,
+              specifiedType: const FullType(Color)) as Color?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -150,6 +161,8 @@ class _$UsersRecord extends UsersRecord {
   @override
   final DocumentReference<Object?>? profile;
   @override
+  final Color? maincolor;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UsersRecord([void Function(UsersRecordBuilder)? updates]) =>
@@ -163,6 +176,7 @@ class _$UsersRecord extends UsersRecord {
       this.photoUrl,
       this.phoneNumber,
       this.profile,
+      this.maincolor,
       this.ffRef})
       : super._();
 
@@ -184,23 +198,24 @@ class _$UsersRecord extends UsersRecord {
         photoUrl == other.photoUrl &&
         phoneNumber == other.phoneNumber &&
         profile == other.profile &&
+        maincolor == other.maincolor &&
         ffRef == other.ffRef;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc($jc($jc(0, email.hashCode), displayName.hashCode),
-                            uid.hashCode),
-                        createdTime.hashCode),
-                    photoUrl.hashCode),
-                phoneNumber.hashCode),
-            profile.hashCode),
-        ffRef.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, email.hashCode);
+    _$hash = $jc(_$hash, displayName.hashCode);
+    _$hash = $jc(_$hash, uid.hashCode);
+    _$hash = $jc(_$hash, createdTime.hashCode);
+    _$hash = $jc(_$hash, photoUrl.hashCode);
+    _$hash = $jc(_$hash, phoneNumber.hashCode);
+    _$hash = $jc(_$hash, profile.hashCode);
+    _$hash = $jc(_$hash, maincolor.hashCode);
+    _$hash = $jc(_$hash, ffRef.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
@@ -213,6 +228,7 @@ class _$UsersRecord extends UsersRecord {
           ..add('photoUrl', photoUrl)
           ..add('phoneNumber', phoneNumber)
           ..add('profile', profile)
+          ..add('maincolor', maincolor)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -249,6 +265,10 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   DocumentReference<Object?>? get profile => _$this._profile;
   set profile(DocumentReference<Object?>? profile) => _$this._profile = profile;
 
+  Color? _maincolor;
+  Color? get maincolor => _$this._maincolor;
+  set maincolor(Color? maincolor) => _$this._maincolor = maincolor;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -267,6 +287,7 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _photoUrl = $v.photoUrl;
       _phoneNumber = $v.phoneNumber;
       _profile = $v.profile;
+      _maincolor = $v.maincolor;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -297,10 +318,11 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
             photoUrl: photoUrl,
             phoneNumber: phoneNumber,
             profile: profile,
+            maincolor: maincolor,
             ffRef: ffRef);
     replace(_$result);
     return _$result;
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,deprecated_member_use_from_same_package,lines_longer_than_80_chars,no_leading_underscores_for_local_identifiers,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new,unnecessary_lambdas
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint
